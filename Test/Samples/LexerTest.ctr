@@ -1,0 +1,156 @@
+//
+// Za¿ó³æ gêœl¹ jaŸñ
+// Modyfikacja: HTD, 2014-12-02
+// TODO: Dodaæ ograniczenia prêdkoœci dla AI, dowi¹zaæ wszystkie semafory, przetestowaæ (i / lub) poprawiæ manewry na autopilocie, dodaæ opcjonalny przejazd innym sk³adem
+//
+
+// Konfiguracja pliku:
+
+config joinduplicatedevents yes endconfig // potrzebne do "uproszczonego" wysy³ania rozk³adów do poci¹gów
+
+// Wyjazd z ¿eberka z podstawieniem siê w perony
+
+include zwierzyniec/htd/proba_hamulca_ezt.ctr end // modu³
+
+// Rozk³ady jazdy
+node -1 0 mc_kociary_pusty memcell 0 0 0 Timetable:none 10 0 none endmemcell // zabiera rozk³ad i prze³¹cza AI w tryb jazdy manewrowej
+node -1 0 mc_kociary_rozklad memcell 0 0 0 Timetable:zwierzyniec/htd/roj65113 10 0 none endmemcell
+
+// Rozkazy dla poci¹gów
+node -1 0 mc_kociary_gotowy memcell 0 0 0 Wait_for_orders 0 0 none endmemcell // prze³¹czenie w tryb gotowoœci
+node -1 0 mc_kociary_jazda memcell 0 0 0 Obey_train 0 0 none endmemcell // prze³¹czenie w tryb jazdy poci¹gowej
+
+// Komórki torów
+node -1 0 mc_kociary_start memcell 0 0 0 none 10 0 tor_trasa_a_start_lok endmemcell // tor postojowy (ograniczenie 5km/h)
+node -1 0 mc_kociary_peron memcell 0 0 0 none 30 0 kociary_peron_ed72 endmemcell // tor przy peronie w Kociarach, tam oddajemy rozk³ad
+
+// Rozpoczêcie zadania
+event onstart multiple 0 none zabierz_rozklad ai3 radio1 podajtarcze kociary_przygotuj_wyjazd endevent
+
+// Zabranie rozk³adu jazdy do manewrów pocz¹tkowych
+event zabierz_rozklad copyvalues 0 mc_kociary_start mc_kociary_pusty endevent
+event zabierz_rozklad addvalues 0 mc_kociary_start * 0 0 endevent // brzydki hack, ale bez tego nie dzia³a
+
+// Prze³¹czenie w tryb gotowoœci przed oddaniem rozk³adów (inaczej rozk³ad nie wchodzi)
+event koniec_manewrow copyvalues 0 mc_kociary_peron mc_kociary_gotowy endevent
+event koniec_manewrow addvalues 0 mc_kociary_peron * 0 0 endevent
+
+// Prze³¹czenie w tryb jazdy poci¹gowej (konieczne do prawid³owego dzia³ania autopilota)
+event jazda_pociagowa copyvalues 0 mc_kociary_peron mc_kociary_jazda endevent
+event jazda_pociagowa addvalues 0 mc_kociary_peron * 0 0 endevent
+
+// Oddanie rozk³adu jazdy po zakoñczeniu manewrów
+event oddaj_rozklad copyvalues 0 mc_kociary_peron mc_kociary_rozklad endevent
+event oddaj_rozklad addvalues 0 mc_kociary_peron * 0 0 endevent // j.w., zawsze przy wysy³aniu rozk³adu na zadany tor
+
+// Podanie tarczy manewrowej do wjazdu na perony
+event podajtarcze multiple 200 anglik_test1315ac kociary_zwr08- kociary_zwr09- anglik_test4581ac ztpodtar endevent
+event ztpodtar multiple 3 none kociary_tm07_ms2 kociary_tm03_ms2 mozna_w_perony endevent
+
+// Ustawienie planowego czasu do odjazdu po rozpoczêciu zadania
+event kociary_przygotuj_wyjazd multiple 955 none daj_wyjazd endevent // t + 00:15:55
+
+// Próba hamulca: (aktywowane po wjechaniu na peron stacji Kociary)
+event kociary_w_peronach multiple 90 none koniec_manewrow ph_start endevent
+event ph_koniec multiple 0 none jazda_pociagowa kociary_prawie_gotowy_do_odjazdu endevent
+
+// Gotowoœæ do odjazdu:
+event kociary_prawie_gotowy_do_odjazdu multiple 5 ph_mc_gotowe kociary_gotowy_do_odjazdu condition memcompare * * 1 endevent // 5 sekund na przygotowanie siê do odjazdu
+event kociary_gotowy_do_odjazdu multiple 0 none oddaj_rozklad endevent // jak nie zrobimy próby hamulca, nie dostaniemy rozk³adu, wiêc odjazdu nie bêdzie :)
+
+// Podanie wyjazdu z Kociar:
+event daj_wyjazd multiple 0 none anglik_test4581ac kociary_zwr08+ p10_zamykaj kociary_c_s10 endevent // t + 00:16:55
+
+// Kociary p.o.
+
+event kociary2 multiple 5 none
+posterunek_kociary_p_s4
+posterunek_kociary_sppp_sp2
+posterunek_kociary_spp_sp2
+posterunek_kociary_spe_sp4
+p9_zamykaj posterunek_kociary_e_s10
+anglik_test18bc
+endevent
+event przystanek_kociary_po multiple 40 none p8_zamykaj endevent // by³o 60, ale konfliktowa³o z otwieraniem / zamykaniem drzwi przez ai
+
+// Wjazd do Chomikowa + odjazd
+
+event chomikjedz multiple 2 none chomikowo_o_s13 chomikowo_zwr01- wjazd_podany endevent
+event przystanek_chomikowo multiple 60 none chomikowo_d_s10 chomikowo_zwr03- zschomwyj endevent
+event zschomwyj multiple 60 none chomikowo_d_s10 endevent
+
+// Wjazd do Psiary Zagroda + wjazd/odjazd do/z Psiary Po³udnie
+
+event psiarywjedz multiple 5 none p5_zamykaj psiary_zagroda_p_s13 anglik_test3450bc wjazd_podany1 endevent
+event przystanek_psiary_zagroda multiple 60 none psiary_zagroda_i_s2 psiary_zagroda_spi_sp2 p4_zamykaj psiary_poludnie_p_s5 ai1 endevent
+event przystanek_psiary_poludnie multiple 60 none psiary_poludnie_g_s2 p3_zamykaj ai4 endevent
+
+// Wjazd i wyjazd z Psiary Œródmieœcie
+
+event srodwjazd multiple 2 none psiary_srodmiescie_p_s5 endevent
+event przystanek_psiary_srodmiescie multiple 60 none anglik_test7599ad zssrodwyjazd p2_zamykaj endevent
+event zssrodwyjazd multiple 60 none psiary_srodmiescie_i_s10 endevent
+
+// Wjazd i wyjazd - Jelonkowo
+
+event jelonwjazd multiple 2 none jelonkowo_p_s13 jelonkowo_zwr02- endevent
+
+event przystanek_jelonkowo multiple 0 none jelonkowo_wyjazd_na_s10 else jelonkowo_wyjazd_na_sz condition propability 0.66 endevent
+
+event jelonkowo_wyjazd_na_s10 multiple 50 none jelonkowo_zwr07- jelonkowo_wyjazd_na_s10_1 endevent
+event jelonkowo_wyjazd_na_s10_1 multiple 50 none jelonkowo_f_s10 endevent
+
+event jelonkowo_wyjazd_na_sz multiple 60 none jelonkowo_zwr07- wyjazd_na_sz jelonkowo_wyjazd_na_sz_1 endevent
+event jelonkowo_wyjazd_na_sz_1 multiple 60 none jelonkowo_f_sz1 endevent
+
+// Wjazd do Pawianowo
+
+event wjazdpaw multiple 60 none pawianowo_p_s13 pawianowo_zwr04- pawianowo_zwr03- endevent
+event aistart multiple 2 none pawianowo_c_s2 endevent
+
+// Manewry w Pawianowie
+
+event przystanek_pawianowo multiple 100 none pawianowo_zwr03+ anglik_test4542ad pawianowo_zwr08- bede_manewry_robila ztnabok endevent
+event ztnabok multiple 10 none pawianowo_d_ms2 pawianowo_tm4_ms2 endevent
+event zebro multiple 60 none pawianowo_zwr09- pawianowo_zwr07- pawianowo_zwr06- ztzebro endevent
+event ztzebro multiple 10 none pawianowo_tm9_ms2 endevent
+
+// Wygaœ Kociary podg
+
+event wygaswjazd multiple 1 none posterunek_kociary_p_s1 posterunek_kociary_sppp_sp1 posterunek_kociary_spp_sp1 endevent
+event wygaswyjazd multiple 1 none posterunek_kociary_spe_sp1 posterunek_kociary_e_s1 endevent
+
+// Jazda AI
+
+event ai3 multiple 1 none kociary_p_s13 anglik_test5198ad p10_zamykaj endevent
+event ai1 multiple 1 none psiary_zagroda_s_s5 endevent
+event ai4 multiple 1 none psiary_srodmiescie_b_s2 endevent
+
+// DŸwiêki
+
+node -1 0 radio1 sound 0 0 0 radio1.wav endsound
+node -1 0 mozna_w_perony sound 0 0 0 mozna_w_perony.wav endsound
+node -1 0 wjazd_podany sound 0 0 0 wjazd_podany.wav endsound
+node -1 0 wjazd_podany1 sound 0 0 0 wjazd_podany1.wav endsound
+node -1 0 wyjazd_na_sz sound 0 0 0 wyjazd_na_sz.wav endsound
+node -1 0 bede_manewry_robila sound 0 0 0 bede_manewry_robila.wav endsound
+
+event radio1 sound 1 radio1 1 endevent
+event mozna_w_perony sound 0 mozna_w_perony 1 endevent
+event wjazd_podany sound 0 wjazd_podany 1 endevent
+event wjazd_podany1 sound 0 wjazd_podany1 1 endevent
+event wyjazd_na_sz sound 0 wyjazd_na_sz 1 endevent
+event bede_manewry_robila sound 0 bede_manewry_robila 1 endevent
+
+// Otwieranie przejazdów
+
+event otwierajp10:free multiple 0 none p10_otwieraj2 endevent
+event otwierajp9:free multiple 0 none p9_otwieraj2 endevent
+event otwierajp8:free multiple 0 none p8_otwieraj1 endevent
+event otwierajp7:free multiple 0 none p7_otwieraj1 endevent
+event otwierajp6:free multiple 0 none p6_otwieraj1 endevent
+event otwierajp5:free multiple 0 none p5_otwieraj1 endevent
+event otwierajp4:free multiple 0 none p4_otwieraj2 endevent
+event otwierajp3:free multiple 0 none p3_otwieraj2 endevent
+event otwierajp2:free multiple 0 none p2_otwieraj1 endevent
+event otwierajp11:free multiple 0 none p11_otwieraj1 endevent

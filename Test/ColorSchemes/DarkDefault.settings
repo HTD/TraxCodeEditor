@@ -1,0 +1,129 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Test.WoofEditor.ColorSchemes" GeneratedClassName="DarkDefault">
+  <Profiles />
+  <Settings>
+    <Setting Name="Background" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">40, 43, 43</Value>
+    </Setting>
+    <Setting Name="Text" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">138, 138, 138</Value>
+    </Setting>
+    <Setting Name="LineNumberBack" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">43, 43, 43</Value>
+    </Setting>
+    <Setting Name="LineNumberFore" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">43, 145, 175</Value>
+    </Setting>
+    <Setting Name="CallTipBack" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">32, 32, 32</Value>
+    </Setting>
+    <Setting Name="CallTipFore" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">43, 145, 175</Value>
+    </Setting>
+    <Setting Name="SelectionBack" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">57, 72, 73</Value>
+    </Setting>
+    <Setting Name="Caret" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">White</Value>
+    </Setting>
+    <Setting Name="CaretLineBack" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">24, 24, 24</Value>
+    </Setting>
+    <Setting Name="IndentGuide" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">64, 64, 64</Value>
+    </Setting>
+    <Setting Name="Marker1" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">0, 192, 0</Value>
+    </Setting>
+    <Setting Name="Marker2" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">192, 0, 0</Value>
+    </Setting>
+    <Setting Name="Marker3" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">Teal</Value>
+    </Setting>
+    <Setting Name="Marker4" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">255, 128, 0</Value>
+    </Setting>
+    <Setting Name="Comment" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">97, 97, 97</Value>
+    </Setting>
+    <Setting Name="Command" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">Green</Value>
+    </Setting>
+    <Setting Name="Content" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">Teal</Value>
+    </Setting>
+    <Setting Name="Identifier" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">248, 239, 201</Value>
+    </Setting>
+    <Setting Name="Separator" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">138, 138, 138</Value>
+    </Setting>
+    <Setting Name="Number" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">White</Value>
+    </Setting>
+    <Setting Name="Keyword" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">42, 167, 144</Value>
+    </Setting>
+    <Setting Name="Keyword1" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">43, 145, 175</Value>
+    </Setting>
+    <Setting Name="Keyword2" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">176, 109, 137</Value>
+    </Setting>
+    <Setting Name="Keyword3" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">215, 91, 96</Value>
+    </Setting>
+    <Setting Name="Keyword4" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">42, 167, 89</Value>
+    </Setting>
+    <Setting Name="Time" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">34, 193, 221</Value>
+    </Setting>
+    <Setting Name="Path" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">86, 156, 214</Value>
+    </Setting>
+    <Setting Name="Red" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">Red</Value>
+    </Setting>
+    <Setting Name="Green" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">Lime</Value>
+    </Setting>
+    <Setting Name="Blue" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">Blue</Value>
+    </Setting>
+    <Setting Name="White" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">White</Value>
+    </Setting>
+    <Setting Name="Orange" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">255, 160, 0</Value>
+    </Setting>
+    <Setting Name="Switch" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">0, 192, 192</Value>
+    </Setting>
+    <Setting Name="Word" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">42, 167, 144</Value>
+    </Setting>
+    <Setting Name="Word2" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">43, 145, 175</Value>
+    </Setting>
+    <Setting Name="Operator" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">242, 224, 153</Value>
+    </Setting>
+    <Setting Name="String" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">215, 91, 96</Value>
+    </Setting>
+    <Setting Name="Character" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">215, 91, 96</Value>
+    </Setting>
+    <Setting Name="Regex" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">192, 64, 0</Value>
+    </Setting>
+    <Setting Name="CommentLine" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">176, 109, 137</Value>
+    </Setting>
+    <Setting Name="CommentDoc" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">97, 97, 97</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
