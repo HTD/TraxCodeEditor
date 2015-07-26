@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScintillaNET", "..\ScintillaNET\src\ScintillaNET\ScintillaNET.csproj", "{22AE2386-60F1-476E-9303-61CDB0AAC4CF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test1", "Test1\Test1.csproj", "{2F5F049E-0C13-494F-9928-C3683B66FFB2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,6 +36,12 @@ Global
 		{22AE2386-60F1-476E-9303-61CDB0AAC4CF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{22AE2386-60F1-476E-9303-61CDB0AAC4CF}.Signed|Any CPU.ActiveCfg = Signed|Any CPU
 		{22AE2386-60F1-476E-9303-61CDB0AAC4CF}.Signed|Any CPU.Build.0 = Signed|Any CPU
+		{2F5F049E-0C13-494F-9928-C3683B66FFB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F5F049E-0C13-494F-9928-C3683B66FFB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F5F049E-0C13-494F-9928-C3683B66FFB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F5F049E-0C13-494F-9928-C3683B66FFB2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F5F049E-0C13-494F-9928-C3683B66FFB2}.Signed|Any CPU.ActiveCfg = Release|Any CPU
+		{2F5F049E-0C13-494F-9928-C3683B66FFB2}.Signed|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

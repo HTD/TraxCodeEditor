@@ -355,14 +355,15 @@ namespace Trax {
             ForeColor = SystemColors.ControlText; //ColorTranslator.FromHtml("#000000");
             GutterBackColor = ColorTranslator.FromHtml("#eeeeee");
             GutterForeColor = ColorTranslator.FromHtml("#aaaaaa");
-            LineEndTypesAllowed = LineEndType.Default;
-            MouseDwellTime = 100;
-            CaretLineVisible = true;
-            CaretLineBackColorAlpha = 256;
-            MouseSelectionRectangularSwitch = true;
-            AdditionalSelectionTyping = true;
-            VirtualSpaceOptions = VirtualSpace.RectangularSelection;
-            IndentationGuides = IndentView.Real;
+            //LineEndTypesAllowed = LineEndType.Default;
+            //MouseDwellTime = 100;
+            //CaretLineVisible = true;
+            //CaretLineBackColorAlpha = 256;
+            //MouseSelectionRectangularSwitch = true;
+            //AdditionalSelectionTyping = true;
+            //VirtualSpaceOptions = VirtualSpace.RectangularSelection;
+            //IndentationGuides = IndentView.Real;
+            //ViewWhitespace = WhitespaceMode.VisibleAlways;
         }
 
         /// <summary>
@@ -405,6 +406,7 @@ namespace Trax {
                 var document = await LoadFileAsync(loader, path, cts.Token, encoding, detectBOM);
                 Document = document;
                 ReleaseDocument(document);
+                
 
                 // The code below is a very naive workaround for the bug which actually works, but it's ridiculously slow for large files:
 
