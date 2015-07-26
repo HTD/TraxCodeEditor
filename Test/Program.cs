@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 
-namespace Test.WoofEditor {
+namespace Trax {
     static class Program {
         /// <summary>
         /// The main entry point for the application.

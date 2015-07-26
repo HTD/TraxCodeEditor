@@ -11,6 +11,7 @@ namespace Trax {
 
         string SamplesDir = @"..\..\Samples";
         int Mode = 0; // Text
+        Encoding ScnEncoding = Encoding.GetEncoding(1250);
 
         /// <summary>
         /// Initializes the editor and loads a color scheme
@@ -75,12 +76,10 @@ namespace Trax {
         /// <param name="filename"></param>
         private async void ScnTest(string filename) {
             Ed.Lexer = Lexer.Null;
-            if (Mode == 0) Ed.Text = File.ReadAllText(String.Format("{0}\\{1}", SamplesDir, filename), Encoding.Default);
-            else await Ed.LoadFile(String.Format("{0}\\{1}", SamplesDir, filename), Encoding.Default);
+            if (Mode == 0) Ed.Text = File.ReadAllText(String.Format("{0}\\{1}", SamplesDir, filename), ScnEncoding);
+            else await Ed.LoadFile(String.Format("{0}\\{1}", SamplesDir, filename), ScnEncoding);
             Ed.ContainerLexerMode = ContainerLexerModes.Visible;
             Ed.Lexer = Lexer.Container;
-            //Ed.ColorScheme.ResetSyntax();
-            
         }
 
         /// <summary>
@@ -92,8 +91,9 @@ namespace Trax {
             else await Ed.LoadFile(String.Format("{0}\\{1}", SamplesDir, filename));
             Ed.Lexer = Lexer.Cpp;
             Ed.SetKeywords(0, "var function return typeof for in if else do while switch case break continue default with");
-            Ed.SetKeywords(1, "this self");
+            Ed.SetKeywords(1, "this");
             Ed.ColorScheme.ResetSyntax();
+            // Folding / indentation tests, irrelevant for now
             Ed.IndentationGuides = IndentView.LookBoth;
             Ed.IndentWidth = 4;
             Ed.VirtualSpaceOptions = VirtualSpace.RectangularSelection;
