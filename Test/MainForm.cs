@@ -1,31 +1,37 @@
-﻿using System;
+﻿using ScintillaNET;
+using System;
 using System.Drawing;
-using System.Windows.Forms;
-using Trax;
-using ScintillaNET;
-using System.Text;
 using System.IO;
+using System.Text;
+using System.Windows.Forms;
 
-namespace Test.WoofEditor {
+namespace Trax {
 
     public partial class MainForm : Form {
 
         string SamplesDir = @"..\..\Samples";
-        //MenuStrip Menu;
+        int Mode = 0; // Text
 
-
+        /// <summary>
+        /// Initializes the editor and loads a color scheme
+        /// </summary>
         public MainForm() {
             InitializeComponent();
             Ed.ContainerLexer = new ScnLexer(Ed);
             Ed.SetColorScheme(ColorSchemes.DarkDefault.Default);
-            //Ed.SetColorScheme(ColorSchemes.DarkDefault.Default);
+            Ed.Lexer = Lexer.Null;
             ListSamples();
         }
 
+        /// <summary>
+        /// Creates test menu
+        /// </summary>
         private void ListSamples() {
             var samples = new ToolStripMenuItem("&Samples");
+            var mode = new ToolStripMenuItem("&Mode");
             MainMenuStrip = new MenuStrip();
             MainMenuStrip.Items.Add(samples);
+            MainMenuStrip.Items.Add(mode);
             foreach (string filename in Directory.EnumerateFiles(SamplesDir))
                 samples.DropDownItems.Add(
                     new ToolStripMenuItem(
@@ -34,9 +40,28 @@ namespace Test.WoofEditor {
                         SelectSample
                     )
                 );
+            mode.DropDownItems.Add(new ToolStripMenuItem("Text", null, SwitchMode) { Tag = 0, Checked = true });
+            mode.DropDownItems.Add(new ToolStripMenuItem("Loader", null, SwitchMode) { Tag = 1 });
             Controls.Add(MainMenuStrip);
         }
 
+        /// <summary>
+        /// Handles mode switching
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SwitchMode(object sender, EventArgs e) {
+            var item = sender as ToolStripMenuItem;
+            Mode = (int)item.Tag;
+            var toolStrip = item.GetCurrentParent();
+            foreach (ToolStripMenuItem i in toolStrip.Items) i.Checked = !i.Checked;
+        }
+
+        /// <summary>
+        /// Selects a sample based on file extension
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SelectSample(object sender, EventArgs e) {
             var item = sender as ToolStripMenuItem;
             var filename = item.Text;
@@ -44,27 +69,34 @@ namespace Test.WoofEditor {
             else ScnTest(filename);
         }
 
+        /// <summary>
+        /// Loads a file as custom format
+        /// </summary>
+        /// <param name="filename"></param>
         private async void ScnTest(string filename) {
-            await Ed.LoadFile(String.Format("{0}\\{1}", SamplesDir, filename), Encoding.UTF8);
-            //Ed.Document = Document.Empty;
-            //Ed.DirectMessage(2037, new IntPtr(65001), IntPtr.Zero);
-            //Ed.Text = System.IO.File.ReadAllText(String.Format("{0}\\{1}", SamplesDir, filename), Encoding.Default);
-            Ed.Lexer = Lexer.Container;
-            Ed.ColorScheme.ResetSyntax();
+            Ed.Lexer = Lexer.Null;
+            if (Mode == 0) Ed.Text = File.ReadAllText(String.Format("{0}\\{1}", SamplesDir, filename), Encoding.Default);
+            else await Ed.LoadFile(String.Format("{0}\\{1}", SamplesDir, filename), Encoding.Default);
             Ed.ContainerLexerMode = ContainerLexerModes.Visible;
+            Ed.Lexer = Lexer.Container;
+            //Ed.ColorScheme.ResetSyntax();
+            
         }
 
+        /// <summary>
+        /// Loads a file as JavaScript
+        /// </summary>
+        /// <param name="filename"></param>
         private async void JavaScriptTest(string filename) {
-            await Ed.LoadFile(String.Format("{0}\\{1}", SamplesDir, filename));
+            if (Mode == 0) Ed.Text = File.ReadAllText(String.Format("{0}\\{1}", SamplesDir, filename));
+            else await Ed.LoadFile(String.Format("{0}\\{1}", SamplesDir, filename));
             Ed.Lexer = Lexer.Cpp;
             Ed.SetKeywords(0, "var function return typeof for in if else do while switch case break continue default with");
             Ed.SetKeywords(1, "this self");
             Ed.ColorScheme.ResetSyntax();
-            //Ed.DwellOnIdentifier += Ed_DwellOnIdentifier;
             Ed.IndentationGuides = IndentView.LookBoth;
             Ed.IndentWidth = 4;
             Ed.VirtualSpaceOptions = VirtualSpace.RectangularSelection;
-            // Enable folding
             Ed.AutomaticFold = (AutomaticFold.Show | AutomaticFold.Click | AutomaticFold.Change);
             Ed.SetProperty("fold", "1");
             Ed.SetProperty("fold.compact", "1");
@@ -79,9 +111,11 @@ namespace Test.WoofEditor {
             Ed.FoldingStyle = FoldingStyles.SquareTrees;
         }
 
-        private void MainForm_Load(object sender, EventArgs e) {
-        }
-
+        /// <summary>
+        /// Quick test of new DwellOnIdentifier event
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Ed_DwellOnIdentifier(object sender, DwellOnIdentifierEventArgs e) {
             e.CallTipText = String.Format(
                 "Identifier: {0}\r\nIndex: {1}\r\nLength: {2}",

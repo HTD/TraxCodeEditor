@@ -1,5 +1,5 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Test.WoofEditor.ColorSchemes" GeneratedClassName="DarkDefault">
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Trax.ColorSchemes" GeneratedClassName="DarkDefault">
   <Profiles />
   <Settings>
     <Setting Name="Background" Type="System.Drawing.Color" Scope="Application">

@@ -1,16 +1,13 @@
-﻿using System;
+﻿using ScintillaNET;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading.Tasks;
-using ScintillaNET;
-using Trax;
-using System.Globalization;
 using System.Text.RegularExpressions;
 
-namespace Test.WoofEditor {
+namespace Trax {
 
     /// <summary>
     /// Lexer for MaSzyna Railway Vehicle Simulator scenery files

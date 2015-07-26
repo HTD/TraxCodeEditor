@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Test.WoofEditor.ColorSchemes {
+namespace Trax.ColorSchemes {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

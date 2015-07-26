@@ -1,5 +1,5 @@
 ﻿
-namespace Test.WoofEditor {
+namespace Trax {
     partial class MainForm {
         /// <summary>
         /// Required designer variable.
@@ -42,6 +42,7 @@ namespace Test.WoofEditor {
             this.Ed.FoldingLineColor = System.Drawing.Color.Empty;
             this.Ed.FoldingStyle = Trax.FoldingStyles.None;
             this.Ed.IndentationGuides = ScintillaNET.IndentView.Real;
+            this.Ed.Lexer = ScintillaNET.Lexer.Null;
             this.Ed.Location = new System.Drawing.Point(0, 0);
             this.Ed.MouseDwellTime = 100;
             this.Ed.MouseSelectionRectangularSwitch = true;
@@ -59,9 +60,8 @@ namespace Test.WoofEditor {
             this.Controls.Add(this.Ed);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Woof Editor Test";
+            this.Text = "TraxCodeEditor Test";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-            this.Load += new System.EventHandler(this.MainForm_Load);
             this.ResumeLayout(false);
 
         }

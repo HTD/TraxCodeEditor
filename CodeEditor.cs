@@ -1,13 +1,13 @@
 ﻿using ScintillaNET;
-using System.Reflection;
-using System.Drawing;
 using System;
 using System.ComponentModel;
-using System.Windows.Forms;
-using System.Threading.Tasks;
-using System.Threading;
+using System.Drawing;
 using System.IO;
+using System.Reflection;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Trax {
 
@@ -375,11 +375,11 @@ namespace Trax {
 
         public async Task<Document> LoadFileAsync(ILoader loader, string path, CancellationToken cancellationToken, Encoding encoding = null, bool detectBOM = true) {
             const int bufferSize = 1024 * 1024;
+            var buffer = new char[bufferSize];
+            var count = 0;
             try {
                 using (var file = new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite, bufferSize: bufferSize, useAsync: true))
-                using (var reader = new StreamReader(file, encoding ?? Encoding.UTF8, detectBOM)) {
-                    var count = 0;
-                    var buffer = new char[bufferSize];
+                using (var reader = new StreamReader(file, encoding ?? Encoding.UTF8, detectBOM, bufferSize)) {
                     while ((count = await reader.ReadAsync(buffer, 0, buffer.Length).ConfigureAwait(false)) > 0) {
                         cancellationToken.ThrowIfCancellationRequested();
                         if (!loader.AddData(buffer, count)) throw new IOException("The data could not be added to the loader.");
@@ -398,15 +398,21 @@ namespace Trax {
             Enabled = false;
             ReadOnly = true;
             try {
+                ClearAll();
                 var loader = CreateLoader(1024 * 1024);
                 if (loader == null) throw new ApplicationException("Unable to create loader.");
                 var cts = new CancellationTokenSource();
-                //Document = Document.Empty;
                 var document = await LoadFileAsync(loader, path, cts.Token, encoding, detectBOM);
                 Document = document;
-                // needed due to Unicode bug in ScintillaNET control
                 ReleaseDocument(document);
-                Text = Text;
+
+                // The code below is a very naive workaround for the bug which actually works, but it's ridiculously slow for large files:
+
+                //var text = Text;
+                //Document = Document.Empty;
+                //ReadOnly = false;
+                //Text = text;
+
                 if (ShowLineNumbers) LineNumbersShow();
                 if (Lexer == Lexer.Container && ContainerLexer != null) {
                     if (ColorScheme != null) ColorScheme.ResetSyntax();
