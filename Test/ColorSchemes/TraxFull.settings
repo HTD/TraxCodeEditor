@@ -1,5 +1,5 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Trax.ColorSchemes" GeneratedClassName="DarkDefault">
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Trax.ColorSchemes" GeneratedClassName="TraxFull">
   <Profiles />
   <Settings>
     <Setting Name="Background" Type="System.Drawing.Color" Scope="Application">
@@ -31,6 +31,15 @@
     </Setting>
     <Setting Name="IndentGuide" Type="System.Drawing.Color" Scope="Application">
       <Value Profile="(Default)">64, 64, 64</Value>
+    </Setting>
+    <Setting Name="FoldMargin" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">40, 43, 43</Value>
+    </Setting>
+    <Setting Name="FoldingLine" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">68, 68, 68</Value>
+    </Setting>
+    <Setting Name="FoldingFill" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">40, 43, 43</Value>
     </Setting>
     <Setting Name="Marker1" Type="System.Drawing.Color" Scope="Application">
       <Value Profile="(Default)">0, 192, 0</Value>
@@ -65,16 +74,16 @@
     <Setting Name="Keyword" Type="System.Drawing.Color" Scope="Application">
       <Value Profile="(Default)">42, 167, 144</Value>
     </Setting>
-    <Setting Name="Keyword1" Type="System.Drawing.Color" Scope="Application">
+    <Setting Name="Keyword2" Type="System.Drawing.Color" Scope="Application">
       <Value Profile="(Default)">43, 145, 175</Value>
     </Setting>
-    <Setting Name="Keyword2" Type="System.Drawing.Color" Scope="Application">
+    <Setting Name="Keyword3" Type="System.Drawing.Color" Scope="Application">
       <Value Profile="(Default)">176, 109, 137</Value>
     </Setting>
-    <Setting Name="Keyword3" Type="System.Drawing.Color" Scope="Application">
+    <Setting Name="Keyword4" Type="System.Drawing.Color" Scope="Application">
       <Value Profile="(Default)">215, 91, 96</Value>
     </Setting>
-    <Setting Name="Keyword4" Type="System.Drawing.Color" Scope="Application">
+    <Setting Name="Keyword5" Type="System.Drawing.Color" Scope="Application">
       <Value Profile="(Default)">42, 167, 89</Value>
     </Setting>
     <Setting Name="Time" Type="System.Drawing.Color" Scope="Application">
@@ -100,12 +109,6 @@
     </Setting>
     <Setting Name="Switch" Type="System.Drawing.Color" Scope="Application">
       <Value Profile="(Default)">0, 192, 192</Value>
-    </Setting>
-    <Setting Name="Word" Type="System.Drawing.Color" Scope="Application">
-      <Value Profile="(Default)">42, 167, 144</Value>
-    </Setting>
-    <Setting Name="Word2" Type="System.Drawing.Color" Scope="Application">
-      <Value Profile="(Default)">43, 145, 175</Value>
     </Setting>
     <Setting Name="Operator" Type="System.Drawing.Color" Scope="Application">
       <Value Profile="(Default)">242, 224, 153</Value>

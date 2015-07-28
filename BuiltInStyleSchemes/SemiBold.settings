@@ -1,0 +1,21 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Trax.BuiltInStyleSchemes" GeneratedClassName="SemiBold">
+  <Profiles />
+  <Settings>
+    <Setting Name="Text" Type="System.Drawing.FontStyle" Scope="Application">
+      <Value Profile="(Default)">Regular</Value>
+    </Setting>
+    <Setting Name="Number" Type="System.Drawing.FontStyle" Scope="Application">
+      <Value Profile="(Default)">Regular</Value>
+    </Setting>
+    <Setting Name="Keyword" Type="System.Drawing.FontStyle" Scope="Application">
+      <Value Profile="(Default)">Bold</Value>
+    </Setting>
+    <Setting Name="Keyword2" Type="System.Drawing.FontStyle" Scope="Application">
+      <Value Profile="(Default)">Regular</Value>
+    </Setting>
+    <Setting Name="Comment" Type="System.Drawing.FontStyle" Scope="Application">
+      <Value Profile="(Default)">Regular</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

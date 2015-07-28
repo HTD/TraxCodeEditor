@@ -28,6 +28,16 @@ namespace Trax {
         #region Private fields
 
         /// <summary>
+        /// A buffer size which is used for loading files as byte streams
+        /// </summary>
+        private const int LoadingBufferSize = 1048576; // 1MB
+
+        /// <summary>
+        /// A number of margin where the folding symbols are displayed
+        /// </summary>
+        private const int FoldMarginIndex = 2;
+
+        /// <summary>
         /// Static constructor sets static fields to default values
         /// </summary>
         private static PropertyInfo[] _StyleProperties;
@@ -46,13 +56,20 @@ namespace Trax {
 
         FoldingStyles _FoldingStyle;
 
-        Color _FoldingBackColor;
+        
+        Color _FoldMarginColor;
         Color _FoldingFillColor;
         Color _FoldingLineColor;
 
         #endregion
 
         #region Properties
+
+        /// <summary>
+        /// Gets or sets encoding used for file operations
+        /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public Encoding Encoding { get; set; }
 
         /// <summary>
         /// Container lexer module (for custom lexers)
@@ -64,6 +81,7 @@ namespace Trax {
                 _ContainerLexer = value;
                 Lexer = Lexer.Container;
                 if (ColorScheme != null) ColorScheme.ResetSyntax();
+                if (StyleScheme != null) StyleScheme.ResetSyntax();
             }
         }
 
@@ -78,6 +96,60 @@ namespace Trax {
         /// </summary>
         [Browsable(false)]
         public ColorScheme ColorScheme { get; protected set; }
+
+        /// <summary>
+        /// Gets style scheme module, used to load global style scheme from object's FontStyle properties
+        /// </summary>
+        [Browsable(false)]
+        public StyleScheme StyleScheme { get; protected set; }
+
+        private Presets _Preset;
+
+        /// <summary>
+        /// Sets predefined build in color scheme, style scheme and line folding scheme or gets the current one
+        /// </summary>
+        [Category("Appearance")]
+        [Description("Sets predefined build in color scheme, style scheme and line folding scheme or gets the current one")]
+        [DefaultValue(typeof(Presets), "Google")]
+        public Presets Preset {
+            get {
+                return _Preset;
+            }
+            set {
+                switch (_Preset = value) {
+                    case Presets.Google:
+                        SetColorScheme(BuiltInColorSchemes.Google.Default);
+                        SetStyleScheme(BuiltInStyleSchemes.SemiBold.Default);
+                        FoldingStyle = FoldingStyles.CurvyTrees;
+                        break;
+                    case Presets.VSLight:
+                        SetColorScheme(BuiltInColorSchemes.VSLight.Default);
+                        SetStyleScheme(BuiltInStyleSchemes.SemiBold.Default);
+                        FoldingStyle = FoldingStyles.SquareTrees;
+                        break;
+                    case Presets.VSDark:
+                        SetColorScheme(BuiltInColorSchemes.VSDark.Default);
+                        SetStyleScheme(BuiltInStyleSchemes.SemiBold.Default);
+                        FoldingStyle = FoldingStyles.SquareTrees;
+                        break;
+                    case Presets.Trax:
+                        SetColorScheme(BuiltInColorSchemes.Trax.Default);
+                        SetStyleScheme(BuiltInStyleSchemes.SemiBold.Default);
+                        FoldingStyle = FoldingStyles.CurvyTrees;
+                        break;
+                    case Presets.Oblivion:
+                        SetColorScheme(BuiltInColorSchemes.Oblivion.Default);
+                        SetStyleScheme(BuiltInStyleSchemes.SemiBold.Default);
+                        FoldingStyle = FoldingStyles.Arrows;
+                        break;
+                    case Presets.Zenburn:
+                        SetColorScheme(BuiltInColorSchemes.Zenburn.Default);
+                        SetStyleScheme(BuiltInStyleSchemes.SemiBold.Default);
+                        FoldingStyle = FoldingStyles.CurvyTrees;
+                        break;
+                }
+            }
+        }
 
         /// <summary>
         /// Indicates if line number should be shown
@@ -101,7 +173,7 @@ namespace Trax {
         [EditorBrowsable(EditorBrowsableState.Always)]
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
-        [DefaultValue(typeof(Font), "Consolas, 11.50pt")]
+        [DefaultValue(typeof(Font), "Consolas, 9.75pt")]
         public override Font Font {
             get {
                 return base.Font;
@@ -151,7 +223,7 @@ namespace Trax {
         [EditorBrowsable(EditorBrowsableState.Always)]
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
-        [DefaultValue(typeof(Color), "ControlText")]
+        [DefaultValue(typeof(Color), "WindowText")]
         public override Color ForeColor {
             get {
                 return base.ForeColor;
@@ -223,10 +295,14 @@ namespace Trax {
             }
         }
 
-        public Color FoldingBackColor {
-            get { return _FoldingBackColor; }
+        [Category("Appearance")]
+        [Description("Gets or sets fold margin color")]
+        [DefaultValue(typeof(Color), "Window")]
+        public Color FoldMarginColor {
+            get { return _FoldMarginColor; }
             set {
-                _FoldingBackColor = value;
+                SetFoldMarginColor(true, _FoldMarginColor = value);
+                SetFoldMarginHighlightColor(true, value);
             }
         }
 
@@ -258,6 +334,10 @@ namespace Trax {
             }
         }
 
+        [Category("Appearance")]
+        [Description("Gets or sets folding symbols")]
+        [DefaultValue(typeof(FoldingStyles), "SquareTrees")]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public FoldingStyles FoldingStyle {
             get { return _FoldingStyle; }
             set {
@@ -313,6 +393,61 @@ namespace Trax {
 
         }
 
+        private bool _ShowFoldMargin;
+
+        public bool ShowFoldMargin {
+            get {
+                return _ShowFoldMargin;
+            }
+            set {
+                if (_ShowFoldMargin = value) {
+                    AutomaticFold = (AutomaticFold.Show | AutomaticFold.Click | AutomaticFold.Change);
+                    SetProperty("fold", "1");
+                    SetProperty("fold.compact", "1");
+                    Margins[FoldMarginIndex].Type = MarginType.Symbol;
+                    Margins[FoldMarginIndex].Mask = Marker.MaskFolders;
+                    Margins[FoldMarginIndex].Sensitive = true;
+                    Margins[FoldMarginIndex].Width = 13;
+                } else {
+                    AutomaticFold = AutomaticFold.None;
+                    SetProperty("fold", "0");
+                    SetProperty("fold.compact", "0");
+                    Margins[FoldMarginIndex].Mask = Marker.MaskAll;
+                    Margins[FoldMarginIndex].Sensitive = false;
+                    Margins[FoldMarginIndex].Width = 0;
+                }
+            }
+        }
+
+        private KeywordSets _Keywords;
+
+        public KeywordSets Keywords {
+            get {
+                return _Keywords;
+            }
+            set {
+                switch (_Keywords = value) {
+                    case KeywordSets.None:
+                    default:
+                        for (int i = 0; i < 8; i++) SetKeywords(i, null);
+                        break;
+                    case KeywordSets.ECMAScript:
+                        SetKeywords(0, "abstract await break case class catch const continue debugger default delete do else enum export extends final finally for function goto if implements import in instanceof interface let native new number object package private protected public return super static string switch synchronized this throw try typeof var void while with yield");
+                        SetKeywords(1, "null true false undefined NaN");
+                        SetKeywords(2, "Array ArrayBuffer Boolean DataView Date Error EvalError Float32Array Float64Array Function Generator GeneratorFunction Infinity Int16Array Int32Array Int8Array InternalError Intl Iterator JSON Map Math NaN Number Object ParallelArray Promise Proxy RangeError ReferenceError Reflect RegExp SIMD Set StopIteration String Symbol SyntaxError TypeError TypedArray URIError Uint16Array Uint32Array Uint8Array Uint8ClampedArray WeakMap WeakSet");
+                        SetKeywords(3, "decodeURI decodeURIComponent encodeURI encodeURIComponent escape eval isFinite isNaN parseFloat parseInt unescape uneval");
+                        break;
+                    case KeywordSets.TypeScript:
+                        SetKeywords(0, "abstract any await break case class catch const continue debugger declare default delete do else enum export extends final finally for function goto if implements import in instanceof interface let module native new number object package private protected public return super static string switch synchronized this throw try typeof var void while with yield");
+                        SetKeywords(1, "null true false undefined NaN");
+                        SetKeywords(2, "Array ArrayBuffer Boolean DataView Date Error EvalError Float32Array Float64Array Function Generator GeneratorFunction Infinity Int16Array Int32Array Int8Array InternalError Intl Iterator JSON Map Math NaN Number Object ParallelArray Promise Proxy RangeError ReferenceError Reflect RegExp SIMD Set StopIteration String Symbol SyntaxError TypeError TypedArray URIError Uint16Array Uint32Array Uint8Array Uint8ClampedArray WeakMap WeakSet");
+                        SetKeywords(3, "decodeURI decodeURIComponent encodeURI encodeURIComponent escape eval isFinite isNaN parseFloat parseInt unescape uneval");
+                        break;
+
+                }
+            }
+        }
+
         #endregion Properties
 
         #region Events
@@ -345,47 +480,71 @@ namespace Trax {
         /// Creates new Scintilla editor and sets its properties to defaults
         /// </summary>
         public CodeEditor() {
-            Lexer = Lexer.Null;
-            Font = new Font("Consolas", 11.50f);
+            AdditionalSelectionTyping = true;
+            BackColor = SystemColors.Window;
             CallTipFont = new Font("Microsoft Sans-Serif", 8f);
             CallTipBackColor = ColorTranslator.FromHtml("#f7f7f7");
             CallTipForeColor = ColorTranslator.FromHtml("#222222");
-            ShowLineNumbers = true;
-            BackColor = SystemColors.Window;  //ColorTranslator.FromHtml("#ffffff");
-            ForeColor = SystemColors.ControlText; //ColorTranslator.FromHtml("#000000");
+            CaretLineVisible = true;
+            CaretLineBackColorAlpha = 256;
+            Encoding = Encoding.UTF8;
+            FoldMarginColor = SystemColors.Window;
+            FoldingStyle = FoldingStyles.SquareTrees;
+            Font = new Font("Consolas", 9.75f);
+            ForeColor = SystemColors.WindowText;
             GutterBackColor = ColorTranslator.FromHtml("#eeeeee");
             GutterForeColor = ColorTranslator.FromHtml("#aaaaaa");
-            //LineEndTypesAllowed = LineEndType.Default;
-            //MouseDwellTime = 100;
-            //CaretLineVisible = true;
-            //CaretLineBackColorAlpha = 256;
-            //MouseSelectionRectangularSwitch = true;
-            //AdditionalSelectionTyping = true;
-            //VirtualSpaceOptions = VirtualSpace.RectangularSelection;
-            //IndentationGuides = IndentView.Real;
-            //ViewWhitespace = WhitespaceMode.VisibleAlways;
+            IndentationGuides = IndentView.Real;
+            Lexer = Lexer.Null; 
+            LineEndTypesAllowed = LineEndType.Default;
+            MouseDwellTime = 100;
+            MouseSelectionRectangularSwitch = true;
+            ShowLineNumbers = true;
+            VirtualSpaceOptions = VirtualSpace.RectangularSelection;
+            Preset = Presets.Google;
         }
 
+        #region Public methods
+
         /// <summary>
-        /// Sets current color scheme from object with color properties
+        /// Sets current color scheme from object with Color properties
         /// </summary>
         /// <param name="source"></param>
         public void SetColorScheme(object source) {
             ColorScheme = new ColorScheme(this, source);
         }
 
-        public async Task<Document> LoadFileAsync(ILoader loader, string path, CancellationToken cancellationToken, Encoding encoding = null, bool detectBOM = true) {
-            const int bufferSize = 1024 * 1024;
-            var buffer = new char[bufferSize];
+        /// <summary>
+        /// Sets current style scheme from object with FontStyle properties
+        /// </summary>
+        /// <param name="source"></param>
+        public void SetStyleScheme(object source) {
+            StyleScheme = new StyleScheme(this, source);
+        }
+
+        /// <summary>
+        /// Loads a file using background document loader, background task (outside UI thread)
+        /// </summary>
+        /// <param name="loader">ILoader instance created with CreateLoader() method</param>
+        /// <param name="path"></param>
+        /// <param name="cancellationToken"></param>
+        /// <param name="encoding"></param>
+        /// <param name="detectBOM"></param>
+        /// <returns></returns>
+        private async Task<Document> LoadDocument(ILoader loader, string path, CancellationToken cancellationToken, Encoding encoding = null, bool detectBOM = true) {
+            var buffer = new char[LoadingBufferSize];
             var count = 0;
             try {
-                using (var file = new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite, bufferSize: bufferSize, useAsync: true))
-                using (var reader = new StreamReader(file, encoding ?? Encoding.UTF8, detectBOM, bufferSize)) {
-                    while ((count = await reader.ReadAsync(buffer, 0, buffer.Length).ConfigureAwait(false)) > 0) {
-                        cancellationToken.ThrowIfCancellationRequested();
-                        if (!loader.AddData(buffer, count)) throw new IOException("The data could not be added to the loader.");
+                using (var file = new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite, bufferSize: LoadingBufferSize, useAsync: true)) {
+                    if (encoding != null) Encoding = encoding;
+                    else if (Encoding == null) Encoding = Encoding.UTF8;
+                    using (var reader = new StreamReader(file, Encoding, detectBOM, LoadingBufferSize)) {
+                        while ((count = await reader.ReadAsync(buffer, 0, buffer.Length).ConfigureAwait(false)) > 0) {
+                            cancellationToken.ThrowIfCancellationRequested();
+                            if (!loader.AddData(buffer, count)) throw new IOException("The data could not be added to the loader.");
+                        }
+                        return loader.ConvertToDocument();
                     }
-                    return loader.ConvertToDocument();
                 }
             } catch {
                 loader.Release();
@@ -393,31 +552,33 @@ namespace Trax {
             }
         }
 
-        public async Task LoadFile(string path, Encoding encoding = null, bool detectBOM = true) {
+        /// <summary>
+        /// Loads a file using background document loader
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="encoding"></param>
+        /// <param name="detectBOM"></param>
+        /// <returns></returns>
+        public async Task LoadFileAsync(string path, Encoding encoding = null, bool detectBOM = true) {
             var _enabled = Enabled;
             var _readonly = ReadOnly;
             Enabled = false;
             ReadOnly = true;
             try {
                 ClearAll();
-                var loader = CreateLoader(1024 * 1024);
+                Document = Document.Empty;
+                var loader = CreateLoader(LoadingBufferSize);
                 if (loader == null) throw new ApplicationException("Unable to create loader.");
                 var cts = new CancellationTokenSource();
-                var document = await LoadFileAsync(loader, path, cts.Token, encoding, detectBOM);
+                if (encoding != null) Encoding = encoding;
+                else if (Encoding == null) Encoding = Encoding.UTF8;
+                var document = await LoadDocument(loader, path, cts.Token, Encoding, detectBOM);
                 Document = document;
                 ReleaseDocument(document);
-                
-
-                // The code below is a very naive workaround for the bug which actually works, but it's ridiculously slow for large files:
-
-                //var text = Text;
-                //Document = Document.Empty;
-                //ReadOnly = false;
-                //Text = text;
-
                 if (ShowLineNumbers) LineNumbersShow();
                 if (Lexer == Lexer.Container && ContainerLexer != null) {
                     if (ColorScheme != null) ColorScheme.ResetSyntax();
+                    if (StyleScheme != null) StyleScheme.ResetSyntax();
                     ApplyContainerLexer();
                 }
             } catch (OperationCanceledException) { }
@@ -428,6 +589,39 @@ namespace Trax {
                 ReadOnly = _readonly;
             }
         }
+
+        /// <summary>
+        /// Loads a file with specified or default encoding
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="encoding"></param>
+        public void LoadFile(string path, Encoding encoding = null) {
+            ClearAll();
+            Document = Document.Empty;
+            if (encoding != null) Encoding = encoding;
+            else if (Encoding == null) Encoding = Encoding.UTF8;
+            Text = File.ReadAllText(path, Encoding);
+            EmptyUndoBuffer();
+            if (ShowLineNumbers) LineNumbersShow();
+            if (Lexer == Lexer.Container && ContainerLexer != null) {
+                if (ColorScheme != null) ColorScheme.ResetSyntax();
+                if (StyleScheme != null) StyleScheme.ResetSyntax();
+                ApplyContainerLexer();
+            }
+        }
+
+        /// <summary>
+        /// Saves a file with specified or default encoding
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="encoding"></param>
+        public void SaveFile(string path, Encoding encoding = null) {
+            if (encoding != null) Encoding = encoding;
+            else if (Encoding == null) Encoding = Encoding.UTF8;
+            File.WriteAllText(path, Text, Encoding);
+        }
+
+        #endregion Public methods
 
         #region Private methods
 
@@ -605,9 +799,13 @@ namespace Trax {
         /// </summary>
         /// <param name="e"></param>
         protected override void OnDwellStart(DwellEventArgs e) {
-            if (DwellOnIdentifier != null) {
+            bool isDebug = false;
+            System.Diagnostics.Debug.Assert(isDebug = true);
+            if (DwellOnIdentifier != null || isDebug) {
                 var index = CharPositionFromPointClose(e.X, e.Y);
                 if (index >= 0) {
+                    if (isDebug) System.Diagnostics.Debug.Print("Lexer style @{0}: {1}", index, GetStyleAt(index));
+                    if (DwellOnIdentifier == null) return;
                     string identifier = null;
                     var identifierRange = default(CharacterRange);
                     var visibleRange = default(CharacterRange);
@@ -696,6 +894,14 @@ namespace Trax {
 
     public enum FoldingStyles {
         None, SquareTrees, CurvyTrees, PlusMinus, Arrows
+    }
+
+    public enum KeywordSets {
+        None, ECMAScript, TypeScript
+    }
+
+    public enum Presets {
+        Google, VSLight, VSDark, Trax, Oblivion, Zenburn
     }
 
 }

@@ -28,6 +28,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\TraxCodeEditor.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -42,6 +43,61 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BuiltInColorSchemes\VSLight.Designer.cs">
+      <DependentUpon>VSLight.settings</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="BuiltInColorSchemes\VSDark.Designer.cs">
+      <DependentUpon>VSDark.settings</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="BuiltInColorSchemes\Zenburn.Designer.cs">
+      <DependentUpon>Zenburn.settings</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="BuiltInColorSchemes\Oblivion.Designer.cs">
+      <DependentUpon>Oblivion.settings</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="BuiltInColorSchemes\Google.Designer.cs">
+      <DependentUpon>Google.settings</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="BuiltInColorSchemes\Trax.Designer.cs">
+      <DependentUpon>Trax.settings</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="BuiltInStyleSchemes\Mixed3.Designer.cs">
+      <DependentUpon>Mixed3.settings</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="BuiltInStyleSchemes\Mixed2.Designer.cs">
+      <DependentUpon>Mixed2.settings</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="BuiltInStyleSchemes\Mixed1.Designer.cs">
+      <DependentUpon>Mixed1.settings</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="BuiltInStyleSchemes\SemiBold.Designer.cs">
+      <DependentUpon>SemiBold.settings</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="BuiltInStyleSchemes\Regular.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Regular.settings</DependentUpon>
+    </Compile>
     <Compile Include="DwellOnIdentifierEventArgs.cs" />
     <Compile Include="DwellOnIdentifierEventHandler.cs" />
     <Compile Include="CodeEditor.cs">
@@ -50,6 +106,7 @@
     <Compile Include="IContainerLexer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ColorScheme.cs" />
+    <Compile Include="StyleScheme.cs" />
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
   <ItemGroup>
@@ -57,6 +114,62 @@
       <Project>{22ae2386-60f1-476e-9303-61cdb0aac4cf}</Project>
       <Name>ScintillaNET</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="BuiltInColorSchemes\VSLight.settings">
+      <Generator>PublicSettingsSingleFileGenerator</Generator>
+      <LastGenOutput>VSLight.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="BuiltInColorSchemes\VSDark.settings">
+      <Generator>PublicSettingsSingleFileGenerator</Generator>
+      <LastGenOutput>VSDark.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="BuiltInColorSchemes\Zenburn.settings">
+      <Generator>PublicSettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Zenburn.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="BuiltInColorSchemes\Oblivion.settings">
+      <Generator>PublicSettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Oblivion.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="BuiltInColorSchemes\Google.settings">
+      <Generator>PublicSettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Google.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="BuiltInColorSchemes\Trax.settings">
+      <Generator>PublicSettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Trax.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="BuiltInStyleSchemes\Mixed3.settings">
+      <Generator>PublicSettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Mixed3.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="BuiltInStyleSchemes\Mixed2.settings">
+      <Generator>PublicSettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Mixed2.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="BuiltInStyleSchemes\Mixed1.settings">
+      <Generator>PublicSettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Mixed1.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="BuiltInStyleSchemes\SemiBold.settings">
+      <Generator>PublicSettingsSingleFileGenerator</Generator>
+      <LastGenOutput>SemiBold.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="BuiltInStyleSchemes\Regular.settings">
+      <Generator>PublicSettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Regular.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Roadmap.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,0 +1,15 @@
+﻿FIXME:
+
+- indentation defaults
+
+TODO:
+
+- auto indent
+- special replace mode (non-breaking delete / back-space)
+- working default popup menu:
+    file: new, open, save, saveAs
+    edit: selectAll, cut, copy, paste
+    search: goToLine, search, replace
+- build in schemes extensibility
+- auto-completion from keywords
+- auto-completion from identifiers

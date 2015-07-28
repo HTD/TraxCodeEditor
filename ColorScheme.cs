@@ -1,13 +1,14 @@
-﻿using System;
+﻿using ScintillaNET;
+using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
-using ScintillaNET;
 
 namespace Trax {
 
     /// <summary>
-    /// Class used to import objects with color properties as Scintilla color schemes
+    /// Class used to import objects with Color properties as Scintilla color schemes
     /// </summary>
     public sealed class ColorScheme {
 
@@ -15,19 +16,70 @@ namespace Trax {
         /// Common colors enumeration (no syntax)
         /// </summary>
         public enum CommonColors {
+            /// <summary>
+            /// Editor background
+            /// </summary>
             Background,
+            /// <summary>
+            /// Editor text color
+            /// </summary>
             Text,
+            /// <summary>
+            /// Selection background color
+            /// </summary>
             SelectionBack,
+            /// <summary>
+            /// Selected text color
+            /// </summary>
             SelectionFore,
+            /// <summary>
+            /// Caret line background color
+            /// </summary>
             CaretLineBack,
+            /// <summary>
+            /// Aditional selection text color
+            /// </summary>
             AditionalSelectionFore,
+            /// <summary>
+            /// Aditional selection background color
+            /// </summary>
             AditionalSelectionBack,
+            /// <summary>
+            /// Caret color
+            /// </summary>
             Caret,
+            /// <summary>
+            /// Line number background color
+            /// </summary>
             LineNumberBack,
+            /// <summary>
+            /// Line number text color
+            /// </summary>
             LineNumberFore,
+            /// <summary>
+            /// Call tip background color
+            /// </summary>
             CallTipBack,
+            /// <summary>
+            /// Call tip text color
+            /// </summary>
             CallTipFore,
-            IndentGuide
+            /// <summary>
+            /// Indentation guide color
+            /// </summary>
+            IndentGuide,
+            /// <summary>
+            /// Fold margin background color
+            /// </summary>
+            FoldMargin,
+            /// <summary>
+            /// Folding symbol line color
+            /// </summary>
+            FoldingLine,
+            /// <summary>
+            /// Folding symbol fill color
+            /// </summary>
+            FoldingFill
         }
 
         /// <summary>
@@ -141,6 +193,15 @@ namespace Trax {
                         case CommonColors.IndentGuide:
                             Editor.Styles[Style.IndentGuide].ForeColor = color;
                             break;
+                        case CommonColors.FoldMargin:
+                            Editor.FoldMarginColor = color;
+                            break;
+                        case CommonColors.FoldingLine:
+                            Editor.FoldingLineColor = color;
+                            break;
+                        case CommonColors.FoldingFill:
+                            Editor.FoldingFillColor = color;
+                            break;
                     }
                 }
             }
@@ -153,8 +214,10 @@ namespace Trax {
         private void SetSyntaxColors(Type syntax) {
             if (SyntaxProperties == null) return;
             var constants = syntax.GetFields();
-            var syntaxStyles = new System.Collections.Generic.Dictionary<string, int>();
+            var syntaxStyles = new Dictionary<string, int>();
             foreach (var fieldInfo in constants) syntaxStyles.Add(fieldInfo.Name, (int)fieldInfo.GetRawConstantValue());
+            if (syntaxStyles.ContainsKey("Word") && !syntaxStyles.ContainsKey("Keyword")) syntaxStyles.Add("Keyword", syntaxStyles["Word"]);
+            if (syntaxStyles.ContainsKey("Word2") && !syntaxStyles.ContainsKey("Keyword2")) syntaxStyles.Add("Keyword2", syntaxStyles["Word2"]);
             foreach (var property in SyntaxProperties) {
                 var name = property.Name;
                 var bare = name;
@@ -167,6 +230,7 @@ namespace Trax {
                     if (backIndex > 0) Editor.Styles[syntaxStyles[bare]].BackColor = (Color)value;
                     else Editor.Styles[syntaxStyles[bare]].ForeColor = (Color)value;
                 }
+                
             }
         }
 

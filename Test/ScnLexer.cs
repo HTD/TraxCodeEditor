@@ -68,10 +68,10 @@ namespace Trax {
             public const int Separator = 4;
             public const int Number = 5;
             public const int Keyword = 6;
-            public const int Keyword1 = 7;
-            public const int Keyword2 = 8;
-            public const int Keyword3 = 9;
-            public const int Keyword4 = 10;
+            public const int Keyword2 = 7;
+            public const int Keyword3 = 8;
+            public const int Keyword4 = 9;
+            public const int Keyword5 = 10;
             public const int Switch = 11;
             public const int Red = 12;
             public const int Green = 13;
@@ -231,10 +231,10 @@ namespace Trax {
                 var i = Buffer.Substring(start, length);
                 if (Double.TryParse(i, NumberStyles.Float, CultureInfo.InvariantCulture, out n)) type = ScnLexer.ScnType.Number;
                 else if (ScnLexer.Keywords[0].Contains(i)) type = ScnLexer.ScnType.Keyword;
-                else if (ScnLexer.Keywords[1].Contains(i)) type = ScnLexer.ScnType.Keyword1;
-                else if (ScnLexer.Keywords[2].Contains(i)) type = ScnLexer.ScnType.Keyword2;
-                else if (ScnLexer.Keywords[3].Contains(i)) type = ScnLexer.ScnType.Keyword3;
-                else if (ScnLexer.Keywords[4].Contains(i)) type = ScnLexer.ScnType.Keyword4;
+                else if (ScnLexer.Keywords[1].Contains(i)) type = ScnLexer.ScnType.Keyword2;
+                else if (ScnLexer.Keywords[2].Contains(i)) type = ScnLexer.ScnType.Keyword3;
+                else if (ScnLexer.Keywords[3].Contains(i)) type = ScnLexer.ScnType.Keyword4;
+                else if (ScnLexer.Keywords[4].Contains(i)) type = ScnLexer.ScnType.Keyword5;
                 else if (i.EndsWith("-") || i.EndsWith("+") || 
                     ((length > 2 && Char.IsDigit(i[length - 3]) &&
                     (i.EndsWith("ac") || i.EndsWith("ad") || i.EndsWith("bc") || i.EndsWith("bd"))))) type = ScnLexer.ScnType.Switch;

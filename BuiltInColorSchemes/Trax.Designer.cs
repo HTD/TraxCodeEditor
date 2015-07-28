@@ -8,16 +8,16 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Trax.ColorSchemes {
+namespace Trax.BuiltInColorSchemes {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "14.0.0.0")]
-    internal sealed partial class DarkDefault : global::System.Configuration.ApplicationSettingsBase {
+    public sealed partial class Trax : global::System.Configuration.ApplicationSettingsBase {
         
-        private static DarkDefault defaultInstance = ((DarkDefault)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new DarkDefault())));
+        private static Trax defaultInstance = ((Trax)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Trax())));
         
-        public static DarkDefault Default {
+        public static Trax Default {
             get {
                 return defaultInstance;
             }
@@ -115,6 +115,33 @@ namespace Trax.ColorSchemes {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("40, 43, 43")]
+        public global::System.Drawing.Color FoldMargin {
+            get {
+                return ((global::System.Drawing.Color)(this["FoldMargin"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("68, 68, 68")]
+        public global::System.Drawing.Color FoldingLine {
+            get {
+                return ((global::System.Drawing.Color)(this["FoldingLine"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("40, 43, 43")]
+        public global::System.Drawing.Color FoldingFill {
+            get {
+                return ((global::System.Drawing.Color)(this["FoldingFill"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0, 192, 0")]
         public global::System.Drawing.Color Marker1 {
             get {
@@ -151,46 +178,10 @@ namespace Trax.ColorSchemes {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("97, 97, 97")]
-        public global::System.Drawing.Color Comment {
-            get {
-                return ((global::System.Drawing.Color)(this["Comment"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Green")]
-        public global::System.Drawing.Color Command {
-            get {
-                return ((global::System.Drawing.Color)(this["Command"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Teal")]
-        public global::System.Drawing.Color Content {
-            get {
-                return ((global::System.Drawing.Color)(this["Content"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("248, 239, 201")]
         public global::System.Drawing.Color Identifier {
             get {
                 return ((global::System.Drawing.Color)(this["Identifier"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("138, 138, 138")]
-        public global::System.Drawing.Color Separator {
-            get {
-                return ((global::System.Drawing.Color)(this["Separator"]));
             }
         }
         
@@ -215,126 +206,9 @@ namespace Trax.ColorSchemes {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("43, 145, 175")]
-        public global::System.Drawing.Color Keyword1 {
-            get {
-                return ((global::System.Drawing.Color)(this["Keyword1"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("176, 109, 137")]
         public global::System.Drawing.Color Keyword2 {
             get {
                 return ((global::System.Drawing.Color)(this["Keyword2"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("215, 91, 96")]
-        public global::System.Drawing.Color Keyword3 {
-            get {
-                return ((global::System.Drawing.Color)(this["Keyword3"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("42, 167, 89")]
-        public global::System.Drawing.Color Keyword4 {
-            get {
-                return ((global::System.Drawing.Color)(this["Keyword4"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("34, 193, 221")]
-        public global::System.Drawing.Color Time {
-            get {
-                return ((global::System.Drawing.Color)(this["Time"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("86, 156, 214")]
-        public global::System.Drawing.Color Path {
-            get {
-                return ((global::System.Drawing.Color)(this["Path"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Red")]
-        public global::System.Drawing.Color Red {
-            get {
-                return ((global::System.Drawing.Color)(this["Red"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Lime")]
-        public global::System.Drawing.Color Green {
-            get {
-                return ((global::System.Drawing.Color)(this["Green"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Blue")]
-        public global::System.Drawing.Color Blue {
-            get {
-                return ((global::System.Drawing.Color)(this["Blue"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("White")]
-        public global::System.Drawing.Color White {
-            get {
-                return ((global::System.Drawing.Color)(this["White"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("255, 160, 0")]
-        public global::System.Drawing.Color Orange {
-            get {
-                return ((global::System.Drawing.Color)(this["Orange"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0, 192, 192")]
-        public global::System.Drawing.Color Switch {
-            get {
-                return ((global::System.Drawing.Color)(this["Switch"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("42, 167, 144")]
-        public global::System.Drawing.Color Word {
-            get {
-                return ((global::System.Drawing.Color)(this["Word"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("43, 145, 175")]
-        public global::System.Drawing.Color Word2 {
-            get {
-                return ((global::System.Drawing.Color)(this["Word2"]));
             }
         }
         
@@ -376,6 +250,15 @@ namespace Trax.ColorSchemes {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("97, 97, 97")]
+        public global::System.Drawing.Color Comment {
+            get {
+                return ((global::System.Drawing.Color)(this["Comment"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("176, 109, 137")]
         public global::System.Drawing.Color CommentLine {
             get {
@@ -389,6 +272,24 @@ namespace Trax.ColorSchemes {
         public global::System.Drawing.Color CommentDoc {
             get {
                 return ((global::System.Drawing.Color)(this["CommentDoc"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Teal")]
+        public global::System.Drawing.Color CommentDocKeywordError {
+            get {
+                return ((global::System.Drawing.Color)(this["CommentDocKeywordError"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0, 192, 0")]
+        public global::System.Drawing.Color GlobalClass {
+            get {
+                return ((global::System.Drawing.Color)(this["GlobalClass"]));
             }
         }
     }
