@@ -1,11 +1,6 @@
-﻿FIXME:
-
-- indentation defaults
-
-TODO:
-
-- auto indent
+﻿TODO:
 - special replace mode (non-breaking delete / back-space)
+- find / replace / mark / go to line dialog
 - working default popup menu:
     file: new, open, save, saveAs
     edit: selectAll, cut, copy, paste

@@ -5,6 +5,7 @@ using System.Drawing;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -38,28 +39,25 @@ namespace Trax {
         private const int FoldMarginIndex = 2;
 
         /// <summary>
-        /// Static constructor sets static fields to default values
+        /// A string used as unit of indentation
         /// </summary>
+        private string IndentationUnit;
+
+        #region Property cache
+
         private static PropertyInfo[] _StyleProperties;
-        /// <summary>
-        /// MaxLineNumberCharLength property cache
-        /// </summary>
         private int _MaxLineNumberCharLength;
-        /// <summary>
-        /// ShowLineNumbers property cache
-        /// </summary>
         private bool _ShowLineNumbers;
-        /// <summary>
-        /// Container lexer cache
-        /// </summary>
         IContainerLexer _ContainerLexer;
-
         FoldingStyles _FoldingStyle;
-
-        
         Color _FoldMarginColor;
         Color _FoldingFillColor;
         Color _FoldingLineColor;
+        private bool _ShowFoldMargin;
+        private KeywordSets _Keywords;
+        private Presets _Preset;
+
+        #endregion
 
         #endregion
 
@@ -70,6 +68,11 @@ namespace Trax {
         /// </summary>
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Encoding Encoding { get; set; }
+
+        /// <summary>
+        /// Gets or sets current file path
+        /// </summary>
+        public string Path { get; protected set; }
 
         /// <summary>
         /// Container lexer module (for custom lexers)
@@ -102,9 +105,6 @@ namespace Trax {
         /// </summary>
         [Browsable(false)]
         public StyleScheme StyleScheme { get; protected set; }
-
-        private Presets _Preset;
-
         /// <summary>
         /// Sets predefined build in color scheme, style scheme and line folding scheme or gets the current one
         /// </summary>
@@ -392,9 +392,6 @@ namespace Trax {
             }
 
         }
-
-        private bool _ShowFoldMargin;
-
         public bool ShowFoldMargin {
             get {
                 return _ShowFoldMargin;
@@ -418,9 +415,6 @@ namespace Trax {
                 }
             }
         }
-
-        private KeywordSets _Keywords;
-
         public KeywordSets Keywords {
             get {
                 return _Keywords;
@@ -447,6 +441,42 @@ namespace Trax {
                 }
             }
         }
+
+        /// <summary>
+        /// Gets or sets the width of a tab as a multiple of a space character.
+        /// </summary>
+        [DefaultValue(4)]
+        public new int TabWidth {
+            get {
+                return base.TabWidth;
+            }
+            set {
+                base.TabWidth = value;
+                IndentationUnit = base.UseTabs ? "\t" : "".PadRight(value);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets whether to use a mixture of tabs and spaces for indentation or purely spaces.
+        /// </summary>
+        [DefaultValue(false)]
+        public new bool UseTabs {
+            get {
+                return base.UseTabs;
+            }
+            set {
+                base.UseTabs = value;
+                IndentationUnit = value ? "\t" : "".PadRight(base.TabWidth);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets automatic indentation feature.
+        /// </summary>
+        [Category("Behavior")]
+        [Description("Gets or sets automatic indentation feature.")]
+        [DefaultValue(true)]
+        public bool AutoIndent { get; set; }
 
         #endregion Properties
 
@@ -481,6 +511,7 @@ namespace Trax {
         /// </summary>
         public CodeEditor() {
             AdditionalSelectionTyping = true;
+            AutoIndent = true;
             BackColor = SystemColors.Window;
             CallTipFont = new Font("Microsoft Sans-Serif", 8f);
             CallTipBackColor = ColorTranslator.FromHtml("#f7f7f7");
@@ -500,6 +531,8 @@ namespace Trax {
             MouseDwellTime = 100;
             MouseSelectionRectangularSwitch = true;
             ShowLineNumbers = true;
+            TabWidth = 4;
+            UseTabs = false;
             VirtualSpaceOptions = VirtualSpace.RectangularSelection;
             Preset = Presets.Google;
         }
@@ -572,7 +605,7 @@ namespace Trax {
                 var cts = new CancellationTokenSource();
                 if (encoding != null) Encoding = encoding;
                 else if (Encoding == null) Encoding = Encoding.UTF8;
-                var document = await LoadDocument(loader, path, cts.Token, Encoding, detectBOM);
+                var document = await LoadDocument(loader, Path = path, cts.Token, Encoding, detectBOM);
                 Document = document;
                 ReleaseDocument(document);
                 if (ShowLineNumbers) LineNumbersShow();
@@ -600,7 +633,8 @@ namespace Trax {
             Document = Document.Empty;
             if (encoding != null) Encoding = encoding;
             else if (Encoding == null) Encoding = Encoding.UTF8;
-            Text = File.ReadAllText(path, Encoding);
+            Text = File.ReadAllText(Path = path, Encoding);
+            
             EmptyUndoBuffer();
             if (ShowLineNumbers) LineNumbersShow();
             if (Lexer == Lexer.Container && ContainerLexer != null) {
@@ -615,7 +649,8 @@ namespace Trax {
         /// </summary>
         /// <param name="path"></param>
         /// <param name="encoding"></param>
-        public void SaveFile(string path, Encoding encoding = null) {
+        public void SaveFile(string path = null, Encoding encoding = null) {
+            if (path == null) path = Path;
             if (encoding != null) Encoding = encoding;
             else if (Encoding == null) Encoding = Encoding.UTF8;
             File.WriteAllText(path, Text, Encoding);
@@ -781,9 +816,71 @@ namespace Trax {
             }
         }
 
+        /// <summary>
+        /// Performs automatic indentation of line inserted based on current line indentation
+        /// Increases indentation if the trimmed line ends with opening brace or colon
+        /// </summary>
+        /// <param name="e"></param>
+        private void AutoIndentInsertCheck(InsertCheckEventArgs e) {
+            var inserted = e.Text;
+            if (inserted[0] != '\r' && inserted[0] != '\n') return;
+            var line = Lines[CurrentLine].Text;
+            var lineIndent = "";
+            var lineTrimmed = line.TrimEnd();
+            var lineTrimmedLength = lineTrimmed.Length;
+            var lineEnd = lineTrimmedLength > 0 ? lineTrimmed[lineTrimmedLength - 1] : '*';
+            char c;
+            for (int i = 0; i < line.Length; i++) {
+                c = line[i];
+                if (c == ' ') lineIndent += c;
+                else if (c == '\t') lineIndent += IndentationUnit;
+                else break;
+            }
+            if (Lexer == Lexer.Cpp || CurrentLine > 0) { // switch case
+                lineTrimmed = lineTrimmed.Trim().TrimEnd(';');
+                var unitLength = IndentationUnit.Length;
+                if (lineTrimmed == "break" && lineIndent.Length > unitLength) {
+                    lineIndent = lineIndent.Substring(unitLength);
+                }
+            }
+            e.Text += lineIndent;
+            if (lineEnd == '{' || lineEnd == '[' || lineEnd == '(' || lineEnd == ':') e.Text += IndentationUnit;
+        }
+
+        /// <summary>
+        /// Performs automatic decrase of indentation if brace is closed as the only non-whitespace character in line
+        /// </summary>
+        /// <param name="e"></param>
+        private void AutoIndentCharAdded(CharAddedEventArgs e) {
+            var c = e.Char;
+            if (c == '}' || c == ']' || c == ')') {
+                var line = Lines[CurrentLine];
+                var lineNonWhitespace = line.Text.Trim();
+                if (lineNonWhitespace.Length == 1) line.Indentation -= TabWidth;
+            }
+        }
+
         #endregion Private methods
 
         #region Overrides
+
+        /// <summary>
+        /// Triggered when a character is added to current document
+        /// </summary>
+        /// <param name="e"></param>
+        protected override void OnCharAdded(CharAddedEventArgs e) {
+            base.OnCharAdded(e);
+            if (AutoIndent) AutoIndentCharAdded(e);
+        }
+
+        /// <summary>
+        /// Triggered when some text (like line ending) is added to current document
+        /// </summary>
+        /// <param name="e"></param>
+        protected override void OnInsertCheck(InsertCheckEventArgs e) {
+            base.OnInsertCheck(e);
+            if (AutoIndent) AutoIndentInsertCheck(e);
+        }
 
         /// <summary>
         /// Updates gutter width when line count changes

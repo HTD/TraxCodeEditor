@@ -57,7 +57,6 @@ namespace Trax {
             this.Ed.ShowFoldMargin = false;
             this.Ed.Size = new System.Drawing.Size(870, 604);
             this.Ed.TabIndex = 0;
-            this.Ed.TabWidth = 8;
             this.Ed.VirtualSpaceOptions = ScintillaNET.VirtualSpace.RectangularSelection;
             // 
             // MainForm

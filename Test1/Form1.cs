@@ -78,8 +78,10 @@ namespace Test1 {
             switch (mode) {
                 case 0:
                     editor.Document = Document.Empty;
+                    editor.EndUndoAction();
                     var text = File.ReadAllText(path, encoding);
                     editor.Text = text;
+                    editor.EmptyUndoBuffer();
                     break;
                 case 1:
                     var loader = editor.CreateLoader(1024 * 1024);
@@ -89,6 +91,7 @@ namespace Test1 {
                     var document = loader.ConvertToDocument();
                     editor.Document = document;
                     editor.ReleaseDocument(document);
+                    editor.UndoCollection = true; // see issue #94
                     break;
             }
         }
