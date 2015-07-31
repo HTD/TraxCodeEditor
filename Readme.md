@@ -86,5 +86,6 @@ Don't worry. TCE will remain super compact and super fast.
 
 The current build use the latest ScintillaNET from GitHub,
 with bugs fixed since latest release.
-Do not use 3.5.0 from NuGet package,
+
+**Do not use 3.5.0 from NuGet package,
 because some features (like document loader) will break.**
