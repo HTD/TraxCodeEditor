@@ -19,7 +19,7 @@ Trax Code Editor aims to be the one code editor to rule them all.
 
 **[Trax](https://github.com/HTD/Trax)** is the name of post-processing
 tool for [train simulator](http://eu07.pl)
-scenery files. I decided to replace it's text editor with another
+scenery files. I decided to replace its text editor with another
 one, based on Scintilla core.
 
 The train simulator itself uses its own hermetic and esoteric file
@@ -85,5 +85,6 @@ Don't worry. TCE will remain super compact and super fast.
 ## Current build
 
 The current build use the latest ScintillaNET from GitHub,
-with bugs fixed since latest release. **Do not use 3.5.0 from NuGet package,
+with bugs fixed since latest release.
+Do not use 3.5.0 from NuGet package,
 because some features (like document loader) will break.**
