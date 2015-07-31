@@ -68,7 +68,8 @@ namespace Trax {
         private void SelectSample(object sender, EventArgs e) {
             var item = sender as ToolStripMenuItem;
             var filename = item.Text;
-            if (filename.EndsWith(".js")) JavaScriptTest(filename);
+            var ext = Path.GetExtension(filename);
+            if (ext == ".js" || ext == ".css" || ext == ".html" || ext == ".htm" || ext == ".cs1") WebDesignTest(filename);
             else ScnTest(filename);
         }
 
@@ -88,11 +89,28 @@ namespace Trax {
         /// Loads a file as JavaScript
         /// </summary>
         /// <param name="filename"></param>
-        private async void JavaScriptTest(string filename) {
+        private async void WebDesignTest(string filename) {
+            var ext = Path.GetExtension(filename);
             if (Mode == 0) Ed.LoadFile(String.Format("{0}\\{1}", SamplesDir, filename));
             else await Ed.LoadFileAsync(String.Format("{0}\\{1}", SamplesDir, filename));
-            Ed.Lexer = Lexer.Cpp;
-            Ed.Keywords = KeywordSets.ECMAScript;
+            switch (ext) {
+                case ".js":
+                    Ed.Lexer = Lexer.Cpp;
+                    Ed.Keywords = KeywordSets.ECMAScript;
+                    break;
+                case ".css":
+                    Ed.Lexer = Lexer.Css;
+                    //Ed.Keywords = KeywordSets.ECMAScript;
+                    break;
+                case ".html":
+                case ".htm":
+                    Ed.Lexer = Lexer.Html;
+                    //Ed.Keywords = KeywordSets.ECMAScript;
+                    break;
+                case ".cs1":
+                    Ed.Lexer = Lexer.Cpp;
+                    break;
+            }
             Ed.ColorScheme.ResetSyntax();
             Ed.StyleScheme.Reset();
             Ed.IndentationGuides = IndentView.LookBoth;

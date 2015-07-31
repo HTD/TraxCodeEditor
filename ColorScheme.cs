@@ -208,6 +208,34 @@ namespace Trax {
         }
 
         /// <summary>
+        /// Maps indexed color to a named property
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="name"></param>
+        private void MapColor(int index, string name) {
+            var property = SyntaxProperties.FirstOrDefault(i => i.Name == name);
+            if (property == null) property = Properties.FirstOrDefault(i => i.Name == name);
+            if (property == null) return;
+            var value = property.GetValue(Source);
+            if (value == null) return;
+            Editor.Styles[index].ForeColor = (Color)value;
+        }
+
+        /// <summary>
+        /// Maps indexed colors to a named property
+        /// </summary>
+        /// <param name="indexes"></param>
+        /// <param name="name"></param>
+        private void MapColors(int[] indexes, string name) {
+            var property = SyntaxProperties.FirstOrDefault(i => i.Name == name);
+            if (property == null) property = Properties.FirstOrDefault(i => i.Name == name);
+            if (property == null) return;
+            var value = property.GetValue(Source);
+            if (value == null) return;
+            foreach (int index in indexes) Editor.Styles[index].ForeColor = (Color)value;
+        }
+
+        /// <summary>
         /// Sets editor colors with name matching specified syntax type
         /// </summary>
         /// <param name="syntax"></param>
@@ -218,6 +246,7 @@ namespace Trax {
             foreach (var fieldInfo in constants) syntaxStyles.Add(fieldInfo.Name, (int)fieldInfo.GetRawConstantValue());
             if (syntaxStyles.ContainsKey("Word") && !syntaxStyles.ContainsKey("Keyword")) syntaxStyles.Add("Keyword", syntaxStyles["Word"]);
             if (syntaxStyles.ContainsKey("Word2") && !syntaxStyles.ContainsKey("Keyword2")) syntaxStyles.Add("Keyword2", syntaxStyles["Word2"]);
+            
             foreach (var property in SyntaxProperties) {
                 var name = property.Name;
                 var bare = name;
@@ -231,6 +260,23 @@ namespace Trax {
                     else Editor.Styles[syntaxStyles[bare]].ForeColor = (Color)value;
                 }
                 
+            }
+            if (Editor.Lexer == Lexer.Html) { // HTML Lexer mapping
+                MapColor(Style.Html.Default, "Text");
+                MapColors(new int[] { Style.Html.Comment, Style.Html.XcComment, 21, 26 }, "Coment");
+                MapColors(new int[] { Style.Html.Tag, Style.Html.TagEnd }, "Keyword");
+                MapColor(Style.Html.Attribute, "Keyword2");
+                MapColors(new int[] { Style.Html.SingleString, Style.Html.DoubleString }, "String");
+                MapColor(Style.Html.Number, "Number");
+                MapColors(new int[] { Style.Html.Other, Style.Html.Entity }, "Operator");
+            }
+            if (Editor.Lexer == Lexer.Css) { // CSS Lexer mapping
+                MapColors(new int[] { Style.Css.Identifier, Style.Css.UnknownIdentifier }, "Identifier");
+                MapColor(Style.Css.Tag, "Keyword");
+                MapColor(Style.Css.Class, "Keyword2");
+                MapColors(new int[] { Style.Css.Value, Style.Css.PseudoClass, Style.Css.UnknownPseudoClass }, "Number");
+                MapColors(new int[] { Style.Css.SingleString, Style.Css.DoubleString }, "Regex");
+                MapColor(Style.Css.Media, "CommentDocKeywordError");
             }
         }
 

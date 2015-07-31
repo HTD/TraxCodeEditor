@@ -1,0 +1,23 @@
+﻿body {
+    background-color: #808080;
+    color: aqua;
+    font: normal 10px "Segoe UI", "Arial", sans-serif;
+}
+
+h1 {
+    color: firebrick;
+}
+
+a:hover {
+    color: aliceblue;
+    margin: 10px 0 auto 10px;
+}
+
+@media (max-width: 600px) {
+    
+    .facet_sidebar {
+        display: none;
+
+        /* this is a sample comment */
+    }
+}

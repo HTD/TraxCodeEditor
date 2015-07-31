@@ -187,7 +187,7 @@ namespace Trax.BuiltInColorSchemes {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1, 150, 137")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0, 52, 170")]
         public global::System.Drawing.Color Number {
             get {
                 return ((global::System.Drawing.Color)(this["Number"]));
@@ -196,7 +196,7 @@ namespace Trax.BuiltInColorSchemes {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("55, 124, 241")]
+        [global::System.Configuration.DefaultSettingValueAttribute("16, 157, 89")]
         public global::System.Drawing.Color Keyword {
             get {
                 return ((global::System.Drawing.Color)(this["Keyword"]));
@@ -205,7 +205,7 @@ namespace Trax.BuiltInColorSchemes {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1, 150, 137")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0, 66, 206")]
         public global::System.Drawing.Color Keyword2 {
             get {
                 return ((global::System.Drawing.Color)(this["Keyword2"]));
@@ -214,7 +214,7 @@ namespace Trax.BuiltInColorSchemes {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("DarkGray")]
+        [global::System.Configuration.DefaultSettingValueAttribute("DimGray")]
         public global::System.Drawing.Color Operator {
             get {
                 return ((global::System.Drawing.Color)(this["Operator"]));
@@ -223,7 +223,7 @@ namespace Trax.BuiltInColorSchemes {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("210, 65, 53")]
+        [global::System.Configuration.DefaultSettingValueAttribute("220, 68, 55")]
         public global::System.Drawing.Color String {
             get {
                 return ((global::System.Drawing.Color)(this["String"]));
@@ -232,7 +232,7 @@ namespace Trax.BuiltInColorSchemes {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("210, 65, 53")]
+        [global::System.Configuration.DefaultSettingValueAttribute("220, 68, 55")]
         public global::System.Drawing.Color Character {
             get {
                 return ((global::System.Drawing.Color)(this["Character"]));
@@ -259,7 +259,7 @@ namespace Trax.BuiltInColorSchemes {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("77, 175, 82")]
+        [global::System.Configuration.DefaultSettingValueAttribute("50, 166, 46")]
         public global::System.Drawing.Color CommentLine {
             get {
                 return ((global::System.Drawing.Color)(this["CommentLine"]));

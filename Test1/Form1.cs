@@ -91,7 +91,7 @@ namespace Test1 {
                     var document = loader.ConvertToDocument();
                     editor.Document = document;
                     editor.ReleaseDocument(document);
-                    editor.UndoCollection = true; // see issue #94
+                    //editor.UndoCollection = true; // see issue #94
                     break;
             }
         }

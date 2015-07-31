@@ -10,7 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Trax {
+namespace ExampleNamespace {
 
     /// <summary>
     /// Advanced extensible Scintilla editor control

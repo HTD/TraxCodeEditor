@@ -241,7 +241,7 @@ namespace Trax.BuiltInColorSchemes {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("14, 93, 14")]
+        [global::System.Configuration.DefaultSettingValueAttribute("114, 193, 114")]
         public global::System.Drawing.Color Regex {
             get {
                 return ((global::System.Drawing.Color)(this["Regex"]));

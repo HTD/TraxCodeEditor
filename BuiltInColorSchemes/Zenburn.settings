@@ -75,7 +75,7 @@
       <Value Profile="(Default)">220, 163, 163</Value>
     </Setting>
     <Setting Name="Regex" Type="System.Drawing.Color" Scope="Application">
-      <Value Profile="(Default)">14, 93, 14</Value>
+      <Value Profile="(Default)">114, 193, 114</Value>
     </Setting>
     <Setting Name="Comment" Type="System.Drawing.Color" Scope="Application">
       <Value Profile="(Default)">Gray</Value>

@@ -110,12 +110,6 @@
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ScintillaNET\src\ScintillaNET\ScintillaNET.csproj">
-      <Project>{22ae2386-60f1-476e-9303-61cdb0aac4cf}</Project>
-      <Name>ScintillaNET</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="app.config" />
     <None Include="BuiltInColorSchemes\VSLight.settings">
       <Generator>PublicSettingsSingleFileGenerator</Generator>
@@ -167,9 +161,13 @@
       <Generator>PublicSettingsSingleFileGenerator</Generator>
       <LastGenOutput>Regular.Designer.cs</LastGenOutput>
     </None>
+    <None Include="Readme.md" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Roadmap.txt" />
+    <ProjectReference Include="..\ScintillaNET\src\ScintillaNET\ScintillaNET.csproj">
+      <Project>{22ae2386-60f1-476e-9303-61cdb0aac4cf}</Project>
+      <Name>ScintillaNET</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
