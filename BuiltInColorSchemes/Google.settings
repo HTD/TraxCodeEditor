@@ -60,11 +60,11 @@
       <Value Profile="(Default)">0, 52, 170</Value>
     </Setting>
     <Setting Name="Keyword" Type="System.Drawing.Color" Scope="Application">
-      <Value Profile="(Default)">16, 157, 89</Value>
-    </Setting>
-    <Setting Name="Keyword2" Type="System.Drawing.Color" Scope="Application">
       <Value Profile="(Default)">0, 66, 206</Value>
     </Setting>
+      <Setting Name="Keyword2" Type="System.Drawing.Color" Scope="Application">
+          <Value Profile="(Default)">16, 157, 89</Value>
+      </Setting>
     <Setting Name="Operator" Type="System.Drawing.Color" Scope="Application">
       <Value Profile="(Default)">DimGray</Value>
     </Setting>

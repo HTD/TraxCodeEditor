@@ -196,7 +196,7 @@ namespace Trax.BuiltInColorSchemes {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("16, 157, 89")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0, 66, 206")]
         public global::System.Drawing.Color Keyword {
             get {
                 return ((global::System.Drawing.Color)(this["Keyword"]));
@@ -205,7 +205,7 @@ namespace Trax.BuiltInColorSchemes {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0, 66, 206")]
+        [global::System.Configuration.DefaultSettingValueAttribute("16, 157, 89")]
         public global::System.Drawing.Color Keyword2 {
             get {
                 return ((global::System.Drawing.Color)(this["Keyword2"]));

@@ -18,7 +18,7 @@ namespace Trax {
         public MainForm() {
             InitializeComponent();
             Ed.ContainerLexer = new ScnLexer(Ed);
-            Ed.Preset = Presets.Zenburn;
+            Ed.Preset = Presets.Google;
             Ed.Lexer = Lexer.Null;
             Ed.FoldingStyle = FoldingStyles.CurvyTrees;
             Ed.FontQuality = FontQuality.LcdOptimized;
@@ -111,8 +111,6 @@ namespace Trax {
                     Ed.Lexer = Lexer.Cpp;
                     break;
             }
-            Ed.ColorScheme.ResetSyntax();
-            Ed.StyleScheme.Reset();
             Ed.IndentationGuides = IndentView.LookBoth;
             Ed.ShowFoldMargin = true;
         }

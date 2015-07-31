@@ -153,6 +153,12 @@ namespace Trax {
                 if (syntaxStyles.ContainsKey(name) && value != null && value is FontStyle)
                     SetEditorStyle(syntaxStyles[name], (FontStyle)value);
             }
+            if (Editor.Lexer == Lexer.Html) {
+                MapStyles(new int[] { Style.Html.Tag, Style.Html.TagEnd, Style.Html.TagUnknown }, "Keyword");
+            }
+            if (Editor.Lexer == Lexer.Css) {
+                MapStyles(new int[] { Style.Css.Identifier, Style.Css.UnknownIdentifier }, "Keyword");
+            }
         }
 
         /// <summary>
@@ -164,6 +170,34 @@ namespace Trax {
             Editor.Styles[index].Bold = style.HasFlag(FontStyle.Bold);
             Editor.Styles[index].Italic = style.HasFlag(FontStyle.Italic);
             Editor.Styles[index].Underline = style.HasFlag(FontStyle.Underline);
+        }
+
+        /// <summary>
+        /// Maps indexed style to a named property
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="name"></param>
+        private void MapStyle(int index, string name) {
+            var property = SyntaxProperties.FirstOrDefault(i => i.Name == name);
+            if (property == null) property = Properties.FirstOrDefault(i => i.Name == name);
+            if (property == null) return;
+            var value = property.GetValue(Source);
+            if (value == null) return;
+            SetEditorStyle(index, (FontStyle)value);
+        }
+
+        /// <summary>
+        /// Maps indexed styles to a named property
+        /// </summary>
+        /// <param name="indexes"></param>
+        /// <param name="name"></param>
+        private void MapStyles(int[] indexes, string name) {
+            var property = SyntaxProperties.FirstOrDefault(i => i.Name == name);
+            if (property == null) property = Properties.FirstOrDefault(i => i.Name == name);
+            if (property == null) return;
+            var value = property.GetValue(Source);
+            if (value == null) return;
+            foreach (int index in indexes) SetEditorStyle(index, (FontStyle)value);
         }
 
     }

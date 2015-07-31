@@ -495,6 +495,20 @@ namespace Trax {
         [DefaultValue(true)]
         public bool AutoIndent { get; set; }
 
+        /// <summary>
+        /// Gets or sets current lexer.
+        /// </summary>
+        public new Lexer Lexer {
+            get {
+                return base.Lexer;
+            }
+            set {
+                base.Lexer = value;
+                if (ColorScheme != null) ColorScheme.Reset();
+                if (StyleScheme != null) StyleScheme.Reset();
+            }
+        }
+
         #endregion Properties
 
         #region Events
