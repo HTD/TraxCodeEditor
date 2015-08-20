@@ -18,7 +18,7 @@ namespace Trax {
         public MainForm() {
             InitializeComponent();
             Ed.ContainerLexer = new ScnLexer(Ed);
-            Ed.Preset = Presets.Google;
+            Ed.Preset = Presets.Zenburn;
             Ed.Lexer = Lexer.Null;
             Ed.FoldingStyle = FoldingStyles.CurvyTrees;
             Ed.FontQuality = FontQuality.LcdOptimized;

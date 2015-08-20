@@ -75,6 +75,11 @@ namespace Trax {
         public string Path { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the shortcut key for "Go to line" command
+        /// </summary>
+        public Keys GoToLineShortcut { get; set; }
+
+        /// <summary>
         /// Container lexer module (for custom lexers)
         /// </summary>
         [Browsable(true)]
@@ -530,6 +535,8 @@ namespace Trax {
 
         #endregion Events
 
+        #region Constructors
+
         /// <summary>
         /// Initializes static properties of the control
         /// </summary>
@@ -566,7 +573,10 @@ namespace Trax {
             UseTabs = false;
             VirtualSpaceOptions = VirtualSpace.RectangularSelection;
             Preset = Presets.Google;
+            GoToLineShortcut = Keys.Control | Keys.G;
         }
+
+        #endregion Constructors
 
         #region Public methods
 
@@ -685,6 +695,36 @@ namespace Trax {
             if (encoding != null) Encoding = encoding;
             else if (Encoding == null) Encoding = Encoding.UTF8;
             File.WriteAllText(path, Text, Encoding);
+        }
+
+        /// <summary>
+        /// Scrolls editor view to show selected line and maximum context around it
+        /// </summary>
+        /// <param name="lineNumber"></param>
+        public void GoToLine(int lineNumber) {
+            var lastPosition = CurrentPosition;
+            var lineCount = Lines.Count;
+            if (lineNumber < 0) lineNumber = 0;
+            if (lineNumber > lineCount) lineNumber = lineCount;
+            var headroom = (LinesOnScreen - 1) / 2;
+            var position = Lines[lineNumber - 1].Position;
+            var firstLine = lineNumber - headroom;
+            var lastLine = lineNumber + headroom;
+            if (firstLine < 0) firstLine = 0;
+            if (lastLine >= lineCount) lastLine = lineCount - 1;
+            GotoPosition(position);
+            ScrollRange(Lines[firstLine].Position, Lines[lastLine].Position);
+            if (lastPosition > position) LineScroll(-headroom, 0);
+        }
+
+        /// <summary>
+        /// Scrolls editor view to show selected line and maximum context around it
+        /// </summary>
+        /// <param name="lineNumberString"></param>
+        internal void GoToLine(string lineNumberString) {
+            int lineNumber;
+            var parseResult = Int32.TryParse(lineNumberString, out lineNumber);
+            if (parseResult) GoToLine(lineNumber);
         }
 
         #endregion Public methods
@@ -894,6 +934,29 @@ namespace Trax {
         #endregion Private methods
 
         #region Overrides
+
+        /// <summary>
+        /// Adds an internal ToolStrip type control, only one of a type
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns>always true, to make shortcut key handled</returns>
+        private bool AddControlOfType(Type type) {
+            foreach (Control ctl in Controls) if (ctl.GetType() == type) return true;
+            var one = Activator.CreateInstance(type, this) as Control;
+            Controls.Add(one);
+            return true;
+        }
+
+        /// <summary>
+        /// Processes shortcuts for internal ToolStrips
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <param name="keyData"></param>
+        /// <returns></returns>
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData) {
+            if (keyData == GoToLineShortcut) return AddControlOfType(typeof(GoToLineControl));
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
 
         /// <summary>
         /// Triggered when a character is added to current document

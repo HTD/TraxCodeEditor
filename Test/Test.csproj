@@ -37,6 +37,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.JScript" />
+    <Reference Include="ScintillaNET, Version=3.5.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\jacobslusser.ScintillaNET.3.5.1\lib\net40\ScintillaNET.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -63,6 +67,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Include="packages.config" />
     <None Include="Samples\CS.cs1">
       <SubType>Component</SubType>
     </None>
@@ -109,10 +114,6 @@
     <Content Include="Samples\Sample.js" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\ScintillaNET\src\ScintillaNET\ScintillaNET.csproj">
-      <Project>{22ae2386-60f1-476e-9303-61cdb0aac4cf}</Project>
-      <Name>ScintillaNET</Name>
-    </ProjectReference>
     <ProjectReference Include="..\TraxCodeEditor.csproj">
       <Project>{cacd5c30-302f-41e7-b07c-bd1ed8845002}</Project>
       <Name>TraxCodeEditor</Name>

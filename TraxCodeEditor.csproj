@@ -31,6 +31,10 @@
     <DocumentationFile>bin\Release\TraxCodeEditor.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ScintillaNET, Version=3.5.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\jacobslusser.ScintillaNET.3.5.1\lib\net40\ScintillaNET.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -103,10 +107,19 @@
     <Compile Include="CodeEditor.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="GoToLineControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="IContainerLexer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ColorScheme.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="StyleScheme.cs" />
+    <Compile Include="ToolStripRendererOverride.cs" />
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
   <ItemGroup>
@@ -161,13 +174,39 @@
       <Generator>PublicSettingsSingleFileGenerator</Generator>
       <LastGenOutput>Regular.Designer.cs</LastGenOutput>
     </None>
+    <None Include="LICENSE" />
+    <None Include="packages.config" />
     <None Include="Readme.md" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ScintillaNET\src\ScintillaNET\ScintillaNET.csproj">
-      <Project>{22ae2386-60f1-476e-9303-61cdb0aac4cf}</Project>
-      <Name>ScintillaNET</Name>
-    </ProjectReference>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CloseInactive.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CloseActive.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\FindAll.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\FindNext.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\FindPrevious.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MatchCase.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MatchWholeWord.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\UseRegularExpressions.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
