@@ -9,7 +9,6 @@ namespace Trax.Editor.Controls {
     /// </summary>
     internal class FindTool : EditorToolStrip {
 
-
         #region Keyboard shortcuts
 
         /// <summary>
@@ -89,6 +88,8 @@ namespace Trax.Editor.Controls {
             ReplaceAll.ToolTipText = I18N.ReplaceAll + ' ' + GetShortcutDescription(ReplaceAllShortcut);
             FindPrevious.Click += (s, e) => OnFind(new FindEventArgs(this, FindDirection.Previous));
             FindNext.Click += (s, e) => OnFind(new FindEventArgs(this, FindDirection.Next));
+            ReplaceNext.Click += (s, e) => OnReplace(new FindEventArgs(this, FindDirection.Next));
+            ReplaceAll.Click += (s, e) => OnReplace(new FindEventArgs(this, FindDirection.All));
         }
 
         /// <summary>
@@ -100,6 +101,16 @@ namespace Trax.Editor.Controls {
         /// Executes find event handler with <see cref="FindDirection.Next"/>.
         /// </summary>
         public void GoFindNext() => OnFind(new FindEventArgs(this, FindDirection.Next));
+
+        /// <summary>
+        /// Executes replace event handler with <see cref="FindDirection.Next"/>.
+        /// </summary>
+        public void GoReplaceNext() => OnReplace(new FindEventArgs(this, FindDirection.Next));
+
+        /// <summary>
+        /// Executes replace event handler with <see cref="FindDirection.All"/>.
+        /// </summary>
+        public void GoReplaceAll() => OnReplace(new FindEventArgs(this, FindDirection.All));
 
         /// <summary>
         /// Creates find tool controls.
@@ -135,9 +146,11 @@ namespace Trax.Editor.Controls {
         /// <param name="context"></param>
         internal override void OnBeforeShow(string context) {
             if (context == "replace") {
+                IsReplaceMode = true;
                 LabelText = I18N.Replace + ':';
                 ReplaceBox.Visible = ReplaceNext.Visible = ReplaceAll.Visible = true;
             } else {
+                IsReplaceMode = false;
                 LabelText = I18N.Find + ':';
                 ReplaceBox.Visible = ReplaceNext.Visible = ReplaceAll.Visible = false;
             }
@@ -146,7 +159,10 @@ namespace Trax.Editor.Controls {
         /// <summary>
         /// Default action on enter key.
         /// </summary>
-        protected override void EnterAction() => OnFind(new FindEventArgs(this, FindDirection.Next));
+        protected override void EnterAction() {
+            if (EnterFrom == FindBox) OnFind(new FindEventArgs(this, FindDirection.Next));
+            else if (EnterFrom == ReplaceBox) OnReplace(new FindEventArgs(this, FindDirection.Next));
+        }
 
         /// <summary>
         /// Handles internal keyboard shortcuts.
@@ -160,10 +176,12 @@ namespace Trax.Editor.Controls {
             if (keyData == MatchCaseShortcut) MatchCase.Checked = !MatchCase.Checked;
             else if (keyData == UseRegularExpressionsShortcut) UseRegularExpressions.Checked = !UseRegularExpressions.Checked;
             else handled = false;
-
-            //if (keyData == ReplaceNextShortcut) OnReplace(new FindEventArgs(this, FindDirection.Next));
-            //else if (keyData == ReplaceAllShortcut) OnReplace(new FindEventArgs(this, FindDirection.All));
-
+            if (IsReplaceMode && !handled) {
+                handled = true;
+                if (keyData == ReplaceNextShortcut) OnReplace(new FindEventArgs(this, FindDirection.Next));
+                else if (keyData == ReplaceAllShortcut) OnReplace(new FindEventArgs(this, FindDirection.All));
+                else handled = false;
+            }
             return handled ? true : baseHandled;
         }
 
@@ -202,10 +220,15 @@ namespace Trax.Editor.Controls {
         internal ToolStripButton UseRegularExpressions = new ToolStripButton() { CheckOnClick = true };
         internal ToolStripButton FindPrevious = new ToolStripButton();
         internal ToolStripButton FindNext = new ToolStripButton();
-
         internal ToolStripTextBox ReplaceBox = new ToolStripTextBox() { AutoSize = false, Width = 200 };
         internal ToolStripButton ReplaceNext = new ToolStripButton();
         internal ToolStripButton ReplaceAll = new ToolStripButton();
+
+        #endregion
+
+        #region Data
+
+        private bool IsReplaceMode;
 
         #endregion
 
@@ -249,6 +272,7 @@ namespace Trax.Editor.Controls {
         /// <param name="direction">Find direction.</param>
         public FindEventArgs(FindTool source, FindDirection direction) {
             Search = source.FindBox.Text;
+            Replace = source.ReplaceBox.Text;
             Direction = direction;
             MatchCase = source.MatchCase.Checked;
             UseRegularExpressions = source.UseRegularExpressions.Checked;

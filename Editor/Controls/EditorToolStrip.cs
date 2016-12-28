@@ -149,6 +149,12 @@ namespace Trax.Editor.Controls {
         protected override bool ProcessCmdKey(ref Message m, Keys keyData) {
             if (keyData == Keys.Escape) { Close(); return true; }
             if (keyData == Keys.Enter) {
+                foreach (var i in Items) {
+                    if (i is ToolStripControlHost) {
+                        var c = i as ToolStripControlHost;
+                        if (c.Focused) EnterFrom = c;
+                    }
+                }
                 EnterAction();
                 if (CloseOnEnter) Close();
                 return true;
@@ -209,6 +215,11 @@ namespace Trax.Editor.Controls {
             get { return base.Parent as CodeEditor; }
             set { base.Parent = value; }
         }
+
+        /// <summary>
+        /// Contains the control from which enter key press was received.
+        /// </summary>
+        protected ToolStripControlHost EnterFrom;
 
         /// <summary>
         /// The tool text label control.

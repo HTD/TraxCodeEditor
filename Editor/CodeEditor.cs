@@ -590,15 +590,13 @@ namespace Trax.Editor {
             TabWidth = 4;
             UseTabs = false;
             VirtualSpaceOptions = VirtualSpace.RectangularSelection;
-            Preset = Presets.Google;
-            
+            Preset = Presets.Trax;
             GoToLineTool = new GoToLineTool();
             GoToLineTool.GoToLine += (s, e) => OnGoToLine(e);
             FindTool = new FindTool();
             FindTool.Find += (s, e) => OnFind(e);
+            FindTool.Replace += (s, e) => OnReplace(e);
             FindTool.Exit += (s, e) => { Find_LastIndex = -1; Find_LastLength = 0; };
-            
-            
         }
 
         #endregion Constructors
@@ -993,11 +991,7 @@ namespace Trax.Editor {
         /// <summary>
         /// Finds specified text.
         /// </summary>
-        /// <param name="search">Search expression.</param>
-        /// <param name="direction">Search direction.</param>
-        /// <param name="matchCase">True to match case.</param>
-        /// <param name="useRegularExpressions">True to treat search expression as regular expression.</param>
-        /// <param name="replace">Optional replacement text.</param>
+        /// <param name="e">Event arguments.</param>
         private void OnFind(FindEventArgs e) {
             Find_GetRegex(e);
             Find_LastIndex = (e.Direction != FindDirection.Previous)
@@ -1017,14 +1011,10 @@ namespace Trax.Editor {
                     }
                     var match = Find_Regex.Match(Text, startIndex, endIndex - startIndex + 1);
                     if (match != null && match.Success) OnFound(match.Index, match.Length);
-                    else {
-                        OnNotFound();
-                        return;
-                    }
+                    else OnNotFound();
                 }
                 catch (ArgumentException) {
                     OnInvalidExpression();
-                    return;
                 }
             }
             else {
@@ -1038,28 +1028,23 @@ namespace Trax.Editor {
                     index = Text.IndexOf(e.Search, startIndex, endIndex - startIndex + 1, stringComparison);
                 }
                 if (index >= 0) OnFound(index, e.Search.Length);
-                else {
-                    OnNotFound();
-                    return;
-                }
+                else OnNotFound();
             }
-            if (e.Replace != null) {
-                if (e.Direction == FindDirection.All) {
-                    if (e.UseRegularExpressions) {
+        }
 
-                    }
-                }
-                else {
-
-                }
-            }
+        /// <summary>
+        /// Replaces term found.
+        /// </summary>
+        /// <param name="e">Event arguments.</param>
+        private void OnReplace(FindEventArgs e) {
+            ;
+            // TODO: Add replace / replace all code.
         }
 
         private void OnFound(int start, int length) {
             GoToLine(LineFromPosition(start));
             SelectionStart = Find_LastIndex = start;
             SelectionEnd = SelectionStart + (Find_LastLength = length);
-
         }
 
         private void OnNotFound() {
@@ -1133,7 +1118,9 @@ namespace Trax.Editor {
             if (keyData == FindTool.FindShortcut) return ShowTool(FindTool);
             if (keyData == FindTool.FindPreviousShortcut) { FindTool.GoFindPrevious(); return true; }
             if (keyData == FindTool.FindNextShortcut) { FindTool.GoFindNext(); return true; }
-            if (keyData == FindTool.ReplaceShortcut) return ShowTool(FindTool, "replace"); // TODO: MAKE FIND / REPLACE DISTINCTION!
+            if (keyData == FindTool.ReplaceShortcut) return ShowTool(FindTool, "replace");
+            if (keyData == FindTool.ReplaceNextShortcut) { FindTool.GoReplaceNext(); return true; }
+            if (keyData == FindTool.ReplaceAllShortcut) { FindTool.GoReplaceAll(); return true; }
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
