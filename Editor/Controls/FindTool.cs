@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace Trax.Editor.Controls {
@@ -7,6 +8,7 @@ namespace Trax.Editor.Controls {
     /// Find tool.
     /// </summary>
     internal class FindTool : EditorToolStrip {
+
 
         #region Keyboard shortcuts
 
@@ -35,6 +37,21 @@ namespace Trax.Editor.Controls {
         /// </summary>
         public Keys UseRegularExpressionsShortcut { get; set; } = Keys.Alt | Keys.E;
 
+        /// <summary>
+        /// Gets or sets the shortcut key for "Replace" command.
+        /// </summary>
+        public Keys ReplaceShortcut { get; set; } = Keys.Control | Keys.H;
+
+        /// <summary>
+        /// Gets or sets the shortcut key for "Replace next" command.
+        /// </summary>
+        public Keys ReplaceNextShortcut { get; set; } = Keys.Alt | Keys.R;
+
+        /// <summary>
+        /// Gets or sets the shortcut key for "Replace all" command.
+        /// </summary>
+        public Keys ReplaceAllShortcut { get; set; } = Keys.Alt | Keys.A;
+
         #endregion
 
         #region Events
@@ -43,6 +60,11 @@ namespace Trax.Editor.Controls {
         /// Occurs when user issues find command either with enter key or a button.
         /// </summary>
         public event EventHandler<FindEventArgs> Find;
+
+        /// <summary>
+        /// Occurs when user issues replace command either with enter key or a button.
+        /// </summary>
+        public event EventHandler<FindEventArgs> Replace;
 
         /// <summary>
         /// Occurs when user exits the control.
@@ -57,12 +79,14 @@ namespace Trax.Editor.Controls {
         /// Creates find tool.
         /// </summary>
         public FindTool() : base() {
-            LabelText = "Find:";
-            FindBox.ToolTipText = "Find text";
-            MatchCase.ToolTipText = "Match case (Alt+C)";
-            UseRegularExpressions.ToolTipText = "Match regular expressions (Alt+E)";
-            FindPrevious.ToolTipText = "Find previous (Shift+F3)";
-            FindNext.ToolTipText = "Find next (F3)";
+            FindBox.ToolTipText = I18N.SearchTerm;
+            ReplaceBox.ToolTipText = I18N.ReplacementTerm;
+            MatchCase.ToolTipText = I18N.MatchCase + ' ' + GetShortcutDescription(MatchCaseShortcut);
+            UseRegularExpressions.ToolTipText = I18N.UseRegularExpressions + ' ' + GetShortcutDescription(UseRegularExpressionsShortcut);
+            FindPrevious.ToolTipText = I18N.FindPrevious + ' ' + GetShortcutDescription(FindPreviousShortcut);
+            FindNext.ToolTipText = I18N.FindNext + ' ' + GetShortcutDescription(FindNextShortcut);
+            ReplaceNext.ToolTipText = I18N.ReplaceNext + ' ' + GetShortcutDescription(ReplaceNextShortcut);
+            ReplaceAll.ToolTipText = I18N.ReplaceAll + ' ' + GetShortcutDescription(ReplaceAllShortcut);
             FindPrevious.Click += (s, e) => OnFind(new FindEventArgs(this, FindDirection.Previous));
             FindNext.Click += (s, e) => OnFind(new FindEventArgs(this, FindDirection.Next));
         }
@@ -86,6 +110,8 @@ namespace Trax.Editor.Controls {
             AddButton(UseRegularExpressions, Properties.Resources.UseRegularExpressions);
             AddButton(FindPrevious, Properties.Resources.FindPrevious);
             AddButton(FindNext, Properties.Resources.FindNext);
+            AddButton(ReplaceNext, Properties.Resources.ReplaceNext);
+            AddButton(ReplaceAll, Properties.Resources.ReplaceAll);
         }
 
         /// <summary>
@@ -93,11 +119,28 @@ namespace Trax.Editor.Controls {
         /// </summary>
         protected override void AddItems() {
             Items.Add(FindBox);
+            Items.Add(ReplaceBox);
             Items.Add(MatchCase);
             Items.Add(UseRegularExpressions);
             Items.Add(new ToolStripSeparator());
             Items.Add(FindPrevious);
             Items.Add(FindNext);
+            Items.Add(ReplaceNext);
+            Items.Add(ReplaceAll);
+        }
+
+        /// <summary>
+        /// Configures find or replace context.
+        /// </summary>
+        /// <param name="context"></param>
+        internal override void OnBeforeShow(string context) {
+            if (context == "replace") {
+                LabelText = I18N.Replace + ':';
+                ReplaceBox.Visible = ReplaceNext.Visible = ReplaceAll.Visible = true;
+            } else {
+                LabelText = I18N.Find + ':';
+                ReplaceBox.Visible = ReplaceNext.Visible = ReplaceAll.Visible = false;
+            }
         }
 
         /// <summary>
@@ -117,6 +160,10 @@ namespace Trax.Editor.Controls {
             if (keyData == MatchCaseShortcut) MatchCase.Checked = !MatchCase.Checked;
             else if (keyData == UseRegularExpressionsShortcut) UseRegularExpressions.Checked = !UseRegularExpressions.Checked;
             else handled = false;
+
+            //if (keyData == ReplaceNextShortcut) OnReplace(new FindEventArgs(this, FindDirection.Next));
+            //else if (keyData == ReplaceAllShortcut) OnReplace(new FindEventArgs(this, FindDirection.All));
+
             return handled ? true : baseHandled;
         }
 
@@ -135,6 +182,12 @@ namespace Trax.Editor.Controls {
         protected void OnFind(FindEventArgs e) => Find?.Invoke(this, e);
 
         /// <summary>
+        /// Triggers <see cref="Replace"/> event.
+        /// </summary>
+        /// <param name="e"></param>
+        protected void OnReplace(FindEventArgs e) => Replace?.Invoke(this, e);
+
+        /// <summary>
         /// Triggers <see cref="Close"/> event.
         /// </summary>
         /// <param name="e"></param>
@@ -149,6 +202,10 @@ namespace Trax.Editor.Controls {
         internal ToolStripButton UseRegularExpressions = new ToolStripButton() { CheckOnClick = true };
         internal ToolStripButton FindPrevious = new ToolStripButton();
         internal ToolStripButton FindNext = new ToolStripButton();
+
+        internal ToolStripTextBox ReplaceBox = new ToolStripTextBox() { AutoSize = false, Width = 200 };
+        internal ToolStripButton ReplaceNext = new ToolStripButton();
+        internal ToolStripButton ReplaceAll = new ToolStripButton();
 
         #endregion
 

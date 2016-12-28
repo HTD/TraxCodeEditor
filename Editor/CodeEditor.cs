@@ -597,10 +597,8 @@ namespace Trax.Editor {
             FindTool = new FindTool();
             FindTool.Find += (s, e) => OnFind(e);
             FindTool.Exit += (s, e) => { Find_LastIndex = -1; Find_LastLength = 0; };
-            ReplaceTool = new ReplaceTool();
-            ReplaceTool.Find += (s, e) => OnFind(e);
-            ReplaceTool.Replace += (s, e) => OnFind(e);
-            ReplaceTool.Exit += (s, e) => { Find_LastIndex = -1; Find_LastLength = 0; };
+            
+            
         }
 
         #endregion Constructors
@@ -974,10 +972,12 @@ namespace Trax.Editor {
         /// Shows specified tool.
         /// </summary>
         /// <param name="tool">Editor tool strip.</param>
+        /// <param name="context">Optional tool context.</param>
         /// <returns>Always true.</returns>
-        private bool ShowTool(EditorToolStrip tool) {
+        private bool ShowTool(EditorToolStrip tool, string context = null) {
             foreach (Control ctl in Controls) if (ctl == tool) return true;
             SuspendLayout();
+            tool.OnBeforeShow(context);
             Controls.Add(tool);
             ResumeLayout();
             Task.Delay(16).ContinueWith(_ => Invoke(new MethodInvoker(() => tool.Focus())));
@@ -1133,7 +1133,7 @@ namespace Trax.Editor {
             if (keyData == FindTool.FindShortcut) return ShowTool(FindTool);
             if (keyData == FindTool.FindPreviousShortcut) { FindTool.GoFindPrevious(); return true; }
             if (keyData == FindTool.FindNextShortcut) { FindTool.GoFindNext(); return true; }
-            if (keyData == ReplaceTool.ReplaceShortcut) return ShowTool(ReplaceTool);
+            if (keyData == FindTool.ReplaceShortcut) return ShowTool(FindTool, "replace"); // TODO: MAKE FIND / REPLACE DISTINCTION!
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
@@ -1257,7 +1257,6 @@ namespace Trax.Editor {
 
         internal readonly GoToLineTool GoToLineTool;
         internal readonly FindTool FindTool;
-        internal readonly ReplaceTool ReplaceTool;
 
         #endregion
 

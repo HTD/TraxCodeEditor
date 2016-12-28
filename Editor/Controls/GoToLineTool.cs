@@ -32,8 +32,8 @@ namespace Trax.Editor.Controls {
         /// Creates go to line tool.
         /// </summary>
         public GoToLineTool() : base() {
-            LabelText = "Go to line:";
-            LineBox.ToolTipText = "Line number";
+            LabelText = I18N.GoToLine + ':';
+            LineBox.ToolTipText = I18N.LineNumber;
         }
 
         /// <summary>

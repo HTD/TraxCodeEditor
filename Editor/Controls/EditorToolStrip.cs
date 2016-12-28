@@ -46,6 +46,21 @@ namespace Trax.Editor.Controls {
         }
 
         /// <summary>
+        /// Gets short, readable keyboard shortcut description.
+        /// </summary>
+        /// <param name="shortcut">Keyboard shortcut.</param>
+        /// <returns>Description like "(Alt+Control+Delete)".</returns>
+        protected static string GetShortcutDescription(Keys shortcut) {
+            var s = shortcut.ToString().Split(new string[] { ", " }, StringSplitOptions.None);
+            Array.Sort(s, new Comparison<string>((a, b) => {
+                if (a == "Alt" || a == "Control" || a == "Shift") return -1;
+                else if (b == "Alt" || b == "Control" || b == "Shift") return 1;
+                else return 0;
+            }));
+            return '(' + String.Join("+", s) + ')';
+        }
+
+        /// <summary>
         /// Handles adding this tool strip to the parent control and removing the tool when no longer used.
         /// </summary>
         /// <param name="sender"></param>
@@ -59,6 +74,8 @@ namespace Trax.Editor.Controls {
                 ResumeLayout();
             }
         }
+
+        internal virtual void OnBeforeShow(string context) { }
 
         /// <summary>
         /// In derived class control creation (with optional event handling) should be defined here.
