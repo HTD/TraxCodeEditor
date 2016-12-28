@@ -24,7 +24,7 @@ namespace Trax {
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            this.Ed = new Trax.CodeEditor();
+            this.Ed = new Trax.Editor.CodeEditor();
             this.SuspendLayout();
             // 
             // Ed
@@ -37,18 +37,18 @@ namespace Trax {
             this.Ed.CaretLineBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(247)))), ((int)(((byte)(247)))));
             this.Ed.CaretLineVisible = true;
             this.Ed.ContainerLexer = null;
-            this.Ed.ContainerLexerMode = Trax.ContainerLexerModes.FullAuto;
+            this.Ed.ContainerLexerMode = Trax.Editor.ContainerLexerModes.FullAuto;
             this.Ed.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Ed.FoldingFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(231)))), ((int)(((byte)(231)))));
             this.Ed.FoldingLineColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(231)))), ((int)(((byte)(231)))));
-            this.Ed.FoldingStyle = Trax.FoldingStyles.CurvyTrees;
+            this.Ed.FoldingStyle = Trax.Editor.FoldingStyles.CurvyTrees;
             this.Ed.FoldMarginColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(231)))), ((int)(((byte)(231)))));
             this.Ed.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.Ed.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(37)))), ((int)(((byte)(40)))));
             this.Ed.GutterBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
             this.Ed.GutterForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(145)))), ((int)(((byte)(175)))));
             this.Ed.IndentationGuides = ScintillaNET.IndentView.Real;
-            this.Ed.Keywords = Trax.KeywordSets.None;
+            this.Ed.Keywords = Trax.Editor.KeywordSets.None;
             this.Ed.Lexer = ScintillaNET.Lexer.Null;
             this.Ed.Location = new System.Drawing.Point(0, 0);
             this.Ed.MouseDwellTime = 100;
@@ -75,7 +75,7 @@ namespace Trax {
 
         #endregion
 
-        private Trax.CodeEditor Ed;
+        private Editor.CodeEditor Ed;
     }
 }
 

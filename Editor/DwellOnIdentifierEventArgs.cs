@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
 
-namespace Trax {
+namespace Trax.Editor {
 
     /// <summary>
     /// EventArgs for DwellOnIdentifier event

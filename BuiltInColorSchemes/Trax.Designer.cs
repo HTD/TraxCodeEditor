@@ -292,5 +292,122 @@ namespace Trax.BuiltInColorSchemes {
                 return ((global::System.Drawing.Color)(this["GlobalClass"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Blue")]
+        public global::System.Drawing.Color Blue {
+            get {
+                return ((global::System.Drawing.Color)(this["Blue"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Green")]
+        public global::System.Drawing.Color Green {
+            get {
+                return ((global::System.Drawing.Color)(this["Green"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Orange")]
+        public global::System.Drawing.Color Orange {
+            get {
+                return ((global::System.Drawing.Color)(this["Orange"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Red")]
+        public global::System.Drawing.Color Red {
+            get {
+                return ((global::System.Drawing.Color)(this["Red"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("White")]
+        public global::System.Drawing.Color White {
+            get {
+                return ((global::System.Drawing.Color)(this["White"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("176, 109, 137")]
+        public global::System.Drawing.Color Keyword3 {
+            get {
+                return ((global::System.Drawing.Color)(this["Keyword3"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("215, 91, 96")]
+        public global::System.Drawing.Color Keyword4 {
+            get {
+                return ((global::System.Drawing.Color)(this["Keyword4"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("42, 167, 89")]
+        public global::System.Drawing.Color Keyword5 {
+            get {
+                return ((global::System.Drawing.Color)(this["Keyword5"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("86, 156, 214")]
+        public global::System.Drawing.Color Path {
+            get {
+                return ((global::System.Drawing.Color)(this["Path"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0, 192, 192")]
+        public global::System.Drawing.Color Switch {
+            get {
+                return ((global::System.Drawing.Color)(this["Switch"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("34, 193, 221")]
+        public global::System.Drawing.Color Time {
+            get {
+                return ((global::System.Drawing.Color)(this["Time"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Green")]
+        public global::System.Drawing.Color Command {
+            get {
+                return ((global::System.Drawing.Color)(this["Command"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Teal")]
+        public global::System.Drawing.Color Content {
+            get {
+                return ((global::System.Drawing.Color)(this["Content"]));
+            }
+        }
     }
 }

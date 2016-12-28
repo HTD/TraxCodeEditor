@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Trax {
+namespace Trax.Editor {
 
     /// <summary>
     /// Interface for Scintilla Container Lexer

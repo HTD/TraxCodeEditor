@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Linq;
 using System.Reflection;
 
-namespace Trax {
+namespace Trax.Editor {
 
     /// <summary>
     /// Class used to import objects with FontStyle properties as Scintilla style schemes

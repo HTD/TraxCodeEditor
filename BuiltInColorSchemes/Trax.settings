@@ -92,5 +92,44 @@
     <Setting Name="GlobalClass" Type="System.Drawing.Color" Scope="Application">
       <Value Profile="(Default)">0, 192, 0</Value>
     </Setting>
+    <Setting Name="Blue" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">Blue</Value>
+    </Setting>
+    <Setting Name="Green" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">Green</Value>
+    </Setting>
+    <Setting Name="Orange" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">Orange</Value>
+    </Setting>
+    <Setting Name="Red" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">Red</Value>
+    </Setting>
+    <Setting Name="White" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">White</Value>
+    </Setting>
+    <Setting Name="Keyword3" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">176, 109, 137</Value>
+    </Setting>
+    <Setting Name="Keyword4" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">215, 91, 96</Value>
+    </Setting>
+    <Setting Name="Keyword5" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">42, 167, 89</Value>
+    </Setting>
+    <Setting Name="Path" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">86, 156, 214</Value>
+    </Setting>
+    <Setting Name="Switch" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">0, 192, 192</Value>
+    </Setting>
+    <Setting Name="Time" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">34, 193, 221</Value>
+    </Setting>
+    <Setting Name="Command" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">Green</Value>
+    </Setting>
+    <Setting Name="Content" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">Teal</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

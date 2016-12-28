@@ -1,16 +1,18 @@
-﻿using ScintillaNET;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ScintillaNET;
+using Trax.Editor.Controls;
 
-namespace Trax {
+namespace Trax.Editor {
 
     /// <summary>
     /// Advanced extensible Scintilla editor control
@@ -64,7 +66,7 @@ namespace Trax {
         #region Properties
 
         /// <summary>
-        /// Gets or sets encoding used for file operations
+        /// Gets or sets encoding used for file operations.
         /// </summary>
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Encoding Encoding { get; set; }
@@ -75,12 +77,7 @@ namespace Trax {
         public string Path { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the shortcut key for "Go to line" command
-        /// </summary>
-        public Keys GoToLineShortcut { get; set; }
-
-        /// <summary>
-        /// Container lexer module (for custom lexers)
+        /// Container lexer module (for custom lexers).
         /// </summary>
         [Browsable(true)]
         public IContainerLexer ContainerLexer {
@@ -350,7 +347,7 @@ namespace Trax {
             get { return _FoldingStyle; }
             set {
                 _FoldingStyle = value;
-                switch(value) {
+                switch (value) {
                     case FoldingStyles.None:
                         Markers[Marker.Folder].Symbol = MarkerSymbol.Empty;
                         Markers[Marker.FolderOpen].Symbol = MarkerSymbol.Empty;
@@ -420,7 +417,8 @@ namespace Trax {
                     Margins[FoldMarginIndex].Mask = Marker.MaskFolders;
                     Margins[FoldMarginIndex].Sensitive = true;
                     Margins[FoldMarginIndex].Width = 13;
-                } else {
+                }
+                else {
                     AutomaticFold = AutomaticFold.None;
                     SetProperty("fold", "0");
                     SetProperty("fold.compact", "0");
@@ -514,6 +512,26 @@ namespace Trax {
             }
         }
 
+        /// <summary>
+        /// Gets presets menu.
+        /// </summary>
+        public ToolStripItem PresetsMenu {
+            get {
+                var schemes = new ToolStripMenuItem("Schemes");
+                var current = Preset.ToString();
+                foreach (var preset in Enum.GetNames(typeof(Presets))) {
+                    schemes.DropDownItems.Add(
+                        new ToolStripMenuItem(
+                            preset,
+                            null,
+                            OnSelectScheme
+                        )
+                    );
+                }
+                return schemes;
+            }
+        }
+
         #endregion Properties
 
         #region Events
@@ -564,7 +582,7 @@ namespace Trax {
             GutterBackColor = ColorTranslator.FromHtml("#eeeeee");
             GutterForeColor = ColorTranslator.FromHtml("#aaaaaa");
             IndentationGuides = IndentView.Real;
-            Lexer = Lexer.Null; 
+            Lexer = Lexer.Null;
             LineEndTypesAllowed = LineEndType.Default;
             MouseDwellTime = 100;
             MouseSelectionRectangularSwitch = true;
@@ -573,7 +591,16 @@ namespace Trax {
             UseTabs = false;
             VirtualSpaceOptions = VirtualSpace.RectangularSelection;
             Preset = Presets.Google;
-            GoToLineShortcut = Keys.Control | Keys.G;
+            
+            GoToLineTool = new GoToLineTool();
+            GoToLineTool.GoToLine += (s, e) => OnGoToLine(e);
+            FindTool = new FindTool();
+            FindTool.Find += (s, e) => OnFind(e);
+            FindTool.Exit += (s, e) => { Find_LastIndex = -1; Find_LastLength = 0; };
+            ReplaceTool = new ReplaceTool();
+            ReplaceTool.Find += (s, e) => OnFind(e);
+            ReplaceTool.Replace += (s, e) => OnFind(e);
+            ReplaceTool.Exit += (s, e) => { Find_LastIndex = -1; Find_LastLength = 0; };
         }
 
         #endregion Constructors
@@ -605,7 +632,7 @@ namespace Trax {
         /// <param name="encoding"></param>
         /// <param name="detectBOM"></param>
         /// <returns></returns>
-        private async Task<Document> LoadDocument(ILoader loader, string path, CancellationToken cancellationToken, Encoding encoding = null, bool detectBOM = true) {
+        private async Task<Document> LoadDocumentAsync(ILoader loader, string path, CancellationToken cancellationToken, Encoding encoding = null, bool detectBOM = true) {
             var buffer = new char[LoadingBufferSize];
             var count = 0;
             try {
@@ -620,7 +647,8 @@ namespace Trax {
                         return loader.ConvertToDocument();
                     }
                 }
-            } catch {
+            }
+            catch {
                 loader.Release();
                 throw;
             }
@@ -646,7 +674,7 @@ namespace Trax {
                 var cts = new CancellationTokenSource();
                 if (encoding != null) Encoding = encoding;
                 else if (Encoding == null) Encoding = Encoding.UTF8;
-                var document = await LoadDocument(loader, Path = path, cts.Token, Encoding, detectBOM);
+                var document = await LoadDocumentAsync(loader, Path = path, cts.Token, Encoding, detectBOM);
                 Document = document;
                 ReleaseDocument(document);
                 if (ShowLineNumbers) LineNumbersShow();
@@ -655,10 +683,12 @@ namespace Trax {
                     if (StyleScheme != null) StyleScheme.ResetSyntax();
                     ApplyContainerLexer();
                 }
-            } catch (OperationCanceledException) { }
+            }
+            catch (OperationCanceledException) { }
             catch (Exception x) {
                 MessageBox.Show(this, x.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            } finally {
+            }
+            finally {
                 Enabled = _enabled;
                 ReadOnly = _readonly;
             }
@@ -675,7 +705,7 @@ namespace Trax {
             if (encoding != null) Encoding = encoding;
             else if (Encoding == null) Encoding = Encoding.UTF8;
             Text = File.ReadAllText(Path = path, Encoding);
-            
+
             EmptyUndoBuffer();
             if (ShowLineNumbers) LineNumbersShow();
             if (Lexer == Lexer.Container && ContainerLexer != null) {
@@ -698,9 +728,20 @@ namespace Trax {
         }
 
         /// <summary>
-        /// Scrolls editor view to show selected line and maximum context around it
+        /// Handles scheme selection from menu.
         /// </summary>
-        /// <param name="lineNumber"></param>
+        /// <param name="sender"><see cref="ToolStripMenuItem"/>.</param>
+        /// <param name="e">Ignored.</param>
+        private void OnSelectScheme(object sender, EventArgs e) {
+            var item = sender as ToolStripMenuItem;
+            var scheme = (Presets)Enum.Parse(typeof(Presets), item.Text);
+            Preset = scheme;
+        }
+
+        /// <summary>
+        /// Scrolls editor view to show selected line and maximum context around it.
+        /// </summary>
+        /// <param name="lineNumber">1-based line index.</param>
         public void GoToLine(int lineNumber) {
             var lastPosition = CurrentPosition;
             var lineCount = Lines.Count;
@@ -714,18 +755,15 @@ namespace Trax {
             if (lastLine >= lineCount) lastLine = lineCount - 1;
             GotoPosition(position);
             ScrollRange(Lines[firstLine].Position, Lines[lastLine].Position);
-            if (lastPosition > position) LineScroll(-headroom, 0);
+            var visibleRange = GetVisibleRange();
+            var offset = firstLine - LineFromPosition(visibleRange.First) - 2;
+            LineScroll(offset, 0);
         }
 
-        /// <summary>
-        /// Scrolls editor view to show selected line and maximum context around it
-        /// </summary>
-        /// <param name="lineNumberString"></param>
-        internal void GoToLine(string lineNumberString) {
-            int lineNumber;
-            var parseResult = Int32.TryParse(lineNumberString, out lineNumber);
-            if (parseResult) GoToLine(lineNumber);
-        }
+        int Find_LastIndex = -1;
+        int Find_LastLength = 0;
+        bool Find_NowReplace = false;
+        Regex Find_Regex = null;
 
         #endregion Public methods
 
@@ -777,7 +815,7 @@ namespace Trax {
             var first = Lines[firstLine].Position;
             var last = Lines[firstLine + lines].EndPosition;
             return new CharacterRange(first, last - first + 1);
-            
+
         }
 
         /// <summary>
@@ -879,7 +917,8 @@ namespace Trax {
                         if (start < visibleStart) start = visibleStart;
                         if (end > visibleEnd) end = visibleEnd;
                     }
-                } else {
+                }
+                else {
                     start = Lines[FirstVisibleLine].Position;
                     end = Lines[FirstVisibleLine + LinesOnScreen - 1].EndPosition;
                 }
@@ -931,30 +970,170 @@ namespace Trax {
             }
         }
 
+        /// <summary>
+        /// Shows specified tool.
+        /// </summary>
+        /// <param name="tool">Editor tool strip.</param>
+        /// <returns>Always true.</returns>
+        private bool ShowTool(EditorToolStrip tool) {
+            foreach (Control ctl in Controls) if (ctl == tool) return true;
+            SuspendLayout();
+            Controls.Add(tool);
+            ResumeLayout();
+            Task.Delay(16).ContinueWith(_ => Invoke(new MethodInvoker(() => tool.Focus())));
+            return true;
+        }
+
+        /// <summary>
+        /// Scrolls editor view to show selected line and maximum context around it.
+        /// </summary>
+        /// <param name="e">Event arguments containing line number.</param>
+        private void OnGoToLine(GoToLineEventArgs e) => GoToLine(e.LineNumber);
+
+        /// <summary>
+        /// Finds specified text.
+        /// </summary>
+        /// <param name="search">Search expression.</param>
+        /// <param name="direction">Search direction.</param>
+        /// <param name="matchCase">True to match case.</param>
+        /// <param name="useRegularExpressions">True to treat search expression as regular expression.</param>
+        /// <param name="replace">Optional replacement text.</param>
+        private void OnFind(FindEventArgs e) {
+            Find_GetRegex(e);
+            Find_LastIndex = (e.Direction != FindDirection.Previous)
+                ? this.CurrentPosition + Find_LastLength
+                : this.CurrentPosition - Find_LastLength;
+            var index = 0;
+            var startIndex = 0;
+            var endIndex = Text.Length - 1;
+            if (Find_Regex != null) {
+                try {
+                    if (e.Direction == FindDirection.Previous) {
+                        Find_Regex = new Regex(Find_Regex.ToString(), Find_Regex.Options | RegexOptions.RightToLeft);
+                        endIndex = Find_LastIndex >= 0 ? Find_LastIndex : CurrentPosition;
+                    } else {
+                        if (Find_LastIndex >= 0) startIndex = Find_LastIndex + Find_LastLength;
+                        Find_Regex = new Regex(Find_Regex.ToString(), Find_Regex.Options & ~RegexOptions.RightToLeft);
+                    }
+                    var match = Find_Regex.Match(Text, startIndex, endIndex - startIndex + 1);
+                    if (match != null && match.Success) OnFound(match.Index, match.Length);
+                    else {
+                        OnNotFound();
+                        return;
+                    }
+                }
+                catch (ArgumentException) {
+                    OnInvalidExpression();
+                    return;
+                }
+            }
+            else {
+                var stringComparison = e.MatchCase ? StringComparison.CurrentCulture : StringComparison.CurrentCultureIgnoreCase;
+                if (e.Direction == FindDirection.Previous) {
+                    endIndex = Find_LastIndex >= 0 ? Find_LastIndex : CurrentPosition;
+                    index = Text.LastIndexOf(e.Search, endIndex, endIndex - startIndex + 1, stringComparison);
+                }
+                else {
+                    if (Find_LastIndex >= 0) startIndex = Find_LastIndex + Find_LastLength;
+                    index = Text.IndexOf(e.Search, startIndex, endIndex - startIndex + 1, stringComparison);
+                }
+                if (index >= 0) OnFound(index, e.Search.Length);
+                else {
+                    OnNotFound();
+                    return;
+                }
+            }
+            if (e.Replace != null) {
+                if (e.Direction == FindDirection.All) {
+                    if (e.UseRegularExpressions) {
+
+                    }
+                }
+                else {
+
+                }
+            }
+        }
+
+        private void OnFound(int start, int length) {
+            GoToLine(LineFromPosition(start));
+            SelectionStart = Find_LastIndex = start;
+            SelectionEnd = SelectionStart + (Find_LastLength = length);
+
+        }
+
+        private void OnNotFound() {
+            Find_LastIndex = -1;
+            Find_LastLength = 0;
+            MessageBox.Show("Not found.");
+        }
+
+        private void OnInvalidExpression() {
+            Find_LastIndex = -1;
+            Find_LastLength = 0;
+            MessageBox.Show("Invalid expression.", "", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        }
+
+        /// <summary>
+        /// Gets optional regular expression from <see cref="FindEventArgs"/>.
+        /// </summary>
+        /// <param name="e">Event arguments.</param>
+        /// <returns>True if no regular expression used or valid regular expression built. False on invalid regular expression given.</returns>
+        private bool Find_GetRegex(FindEventArgs e) {
+            if (e.UseRegularExpressions) {
+                var regexOptions = RegexOptions.Compiled;
+                if (!e.MatchCase) regexOptions |= RegexOptions.IgnoreCase;
+                try {
+                    Find_Regex = new Regex(e.Search, regexOptions);
+                    return true;
+                }
+                catch {
+                    Find_Regex = null;
+                    OnInvalidExpression();
+                    return false;
+                }
+            }
+            Find_Regex = null;
+            return true;
+        }
+
+        /// <summary>
+        /// Searches for the next match using regular expression.
+        /// </summary>
+        /// <param name="e">Event arguments.</param>
+        /// <returns>True if match found. Else otherwise.</returns>
+        private bool Find_SearchRegexForward(FindEventArgs e) {
+            var startIndex = 0;
+            var endIndex = Text.Length - 1;
+            if (Find_LastIndex >= 0) startIndex = Find_LastIndex + Find_LastLength;
+            var match = Find_Regex.Match(Text, startIndex, endIndex - startIndex + 1);
+            if (match != null && match.Success) {
+                OnFound(match.Index, match.Length);
+                return true;
+            }
+            else {
+                OnNotFound();
+                return false;
+            }
+        }
+
+
         #endregion Private methods
 
         #region Overrides
 
         /// <summary>
-        /// Adds an internal ToolStrip type control, only one of a type
-        /// </summary>
-        /// <param name="type"></param>
-        /// <returns>always true, to make shortcut key handled</returns>
-        private bool AddControlOfType(Type type) {
-            foreach (Control ctl in Controls) if (ctl.GetType() == type) return true;
-            var one = Activator.CreateInstance(type, this) as Control;
-            Controls.Add(one);
-            return true;
-        }
-
-        /// <summary>
         /// Processes shortcuts for internal ToolStrips
         /// </summary>
-        /// <param name="msg"></param>
-        /// <param name="keyData"></param>
-        /// <returns></returns>
+        /// <param name="msg">Windows message.</param>
+        /// <param name="keyData">Key presses detected.</param>
+        /// <returns>True if the shortcut was handled.</returns>
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData) {
-            if (keyData == GoToLineShortcut) return AddControlOfType(typeof(GoToLineControl));
+            if (keyData == GoToLineTool.GoToLineShortcut) return ShowTool(GoToLineTool);
+            if (keyData == FindTool.FindShortcut) return ShowTool(FindTool);
+            if (keyData == FindTool.FindPreviousShortcut) { FindTool.GoFindPrevious(); return true; }
+            if (keyData == FindTool.FindNextShortcut) { FindTool.GoFindNext(); return true; }
+            if (keyData == ReplaceTool.ReplaceShortcut) return ShowTool(ReplaceTool);
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
@@ -995,7 +1174,7 @@ namespace Trax {
             if (DwellOnIdentifier != null || isDebug) {
                 var index = CharPositionFromPointClose(e.X, e.Y);
                 if (index >= 0) {
-                    if (isDebug) System.Diagnostics.Debug.Print("Lexer style @{0}: {1}", index, GetStyleAt(index));
+                    //if (isDebug) System.Diagnostics.Debug.Print("Lexer style @{0}: {1}", index, GetStyleAt(index));
                     if (DwellOnIdentifier == null) return;
                     string identifier = null;
                     var identifierRange = default(CharacterRange);
@@ -1008,8 +1187,10 @@ namespace Trax {
                         if (!String.IsNullOrEmpty(eventArgs.CallTipText))
                             CallTipShow(identifierRange.First, eventArgs.CallTipText);
                         else CallTipCancel();
-                    } else CallTipCancel();
-                } else CallTipCancel();
+                    }
+                    else CallTipCancel();
+                }
+                else CallTipCancel();
             }
             base.OnDwellStart(e);
         }
@@ -1068,10 +1249,25 @@ namespace Trax {
             base.OnUpdateUI(e);
         }
 
+
+
         #endregion Overrides
+
+        #region Tools instances
+
+        internal readonly GoToLineTool GoToLineTool;
+        internal readonly FindTool FindTool;
+        internal readonly ReplaceTool ReplaceTool;
+
+        #endregion
 
     }
 
+    #region Enumerations
+
+    /// <summary>
+    /// ContainerLexer modes.
+    /// </summary>
     public enum ContainerLexerModes {
         /// <summary>
         /// Document is parsed from last unscanned position to last visible line
@@ -1103,5 +1299,7 @@ namespace Trax {
     public enum Presets {
         Google, VSLight, VSDark, Trax, Oblivion, Zenburn
     }
+
+    #endregion
 
 }

@@ -37,8 +37,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.JScript" />
-    <Reference Include="ScintillaNET, Version=3.5.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\jacobslusser.ScintillaNET.3.5.1\lib\net40\ScintillaNET.dll</HintPath>
+    <Reference Include="ScintillaNET, Version=3.5.10.0, Culture=neutral, PublicKeyToken=d42c48f11a620156, processorArchitecture=MSIL">
+      <HintPath>..\packages\jacobslusser.ScintillaNET.Signed.3.5.10\lib\net40\ScintillaNET.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -71,7 +71,6 @@
     <None Include="Samples\CS.cs1">
       <SubType>Component</SubType>
     </None>
-    <Compile Include="ScnLexer.cs" />
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -109,6 +108,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Images\Dog.jpg" />
     <Content Include="Samples\CSS.css" />
     <Content Include="Samples\HTML.html" />
     <Content Include="Samples\Sample.js" />

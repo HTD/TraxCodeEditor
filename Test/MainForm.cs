@@ -3,6 +3,8 @@ using System;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
+using Trax.Editor;
+using Trax.Editor.Lexers;
 
 namespace Trax {
 
@@ -18,11 +20,12 @@ namespace Trax {
         public MainForm() {
             InitializeComponent();
             Ed.ContainerLexer = new ScnLexer(Ed);
-            Ed.Preset = Presets.Zenburn;
+            Ed.SetColorScheme(ColorSchemes.TraxFull.Default);
             Ed.Lexer = Lexer.Null;
             Ed.FoldingStyle = FoldingStyles.CurvyTrees;
             Ed.FontQuality = FontQuality.LcdOptimized;
             Ed.Technology = Technology.DirectWrite;
+            Ed.DwellOnIdentifier += Ed_DwellOnIdentifier;
             ListSamples();
         }
 
@@ -32,9 +35,12 @@ namespace Trax {
         private void ListSamples() {
             var samples = new ToolStripMenuItem("&Samples");
             var mode = new ToolStripMenuItem("&Mode");
+            
             MainMenuStrip = new MenuStrip();
             MainMenuStrip.Items.Add(samples);
             MainMenuStrip.Items.Add(mode);
+            MainMenuStrip.Items.Add(Ed.PresetsMenu);
+
             foreach (string filename in Directory.EnumerateFiles(SamplesDir))
                 samples.DropDownItems.Add(
                     new ToolStripMenuItem(
@@ -45,6 +51,19 @@ namespace Trax {
                 );
             mode.DropDownItems.Add(new ToolStripMenuItem("Text", null, SwitchMode) { Tag = 0, Checked = true });
             mode.DropDownItems.Add(new ToolStripMenuItem("Loader", null, SwitchMode) { Tag = 1 });
+
+            //var schemes = new ToolStripMenuItem("S&chemes");
+            //foreach (var preset in Enum.GetNames(typeof(Presets))) {
+            //    schemes.DropDownItems.Add(
+            //        new ToolStripMenuItem(
+            //            preset,
+            //            null,
+            //            SelectScheme
+            //        )
+            //    );
+            //}
+            
+
             Controls.Add(MainMenuStrip);
         }
 
@@ -71,6 +90,12 @@ namespace Trax {
             var ext = Path.GetExtension(filename);
             if (ext == ".js" || ext == ".css" || ext == ".html" || ext == ".htm" || ext == ".cs1") WebDesignTest(filename);
             else ScnTest(filename);
+        }
+
+        private void SelectScheme(object sender, EventArgs e) {
+            var item = sender as ToolStripMenuItem;
+            var scheme = (Presets)Enum.Parse(typeof(Presets), item.Text);
+            Ed.Preset = scheme;
         }
 
         /// <summary>
