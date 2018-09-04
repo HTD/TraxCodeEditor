@@ -79,8 +79,7 @@ namespace Trax.Editor.Controls {
         /// </summary>
         protected override void EnterAction() {
             if (!String.IsNullOrEmpty(LineBox.Text)) {
-                int lineNumber;
-                bool isParsed = int.TryParse(LineBox.Text, out lineNumber);
+                bool isParsed = int.TryParse(LineBox.Text, out var lineNumber);
                 if (isParsed) OnGoToLine(new GoToLineEventArgs(lineNumber));
             }
         }
@@ -115,9 +114,7 @@ namespace Trax.Editor.Controls {
         /// Creates new event arguments for <see cref="GoToLineTool.GoToLine"/> event.
         /// </summary>
         /// <param name="lineNumber">Line number entered.</param>
-        public GoToLineEventArgs(int lineNumber) {
-            LineNumber = lineNumber;
-        }
+        public GoToLineEventArgs(int lineNumber) => LineNumber = lineNumber;
 
     }
 

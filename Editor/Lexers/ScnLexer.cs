@@ -47,7 +47,7 @@ namespace Trax.Editor.Lexers {
         /// <summary>
         /// IContainerLexer implementation: returns style number definition class type
         /// </summary>
-        public Type SyntaxType { get { return typeof(ScnType); } }
+        public Type SyntaxType => typeof(ScnType);
 
         private struct State {
             public const int Unknown = 0;
@@ -91,7 +91,7 @@ namespace Trax.Editor.Lexers {
         /// Creates a lexer bound to scintilla editor control
         /// </summary>
         /// <param name="scintilla"></param>
-        public ScnLexer(Scintilla scintilla) { Scintilla = scintilla; }
+        public ScnLexer(Scintilla scintilla) => Scintilla = scintilla;
 
         /// <summary>
         /// Performs lexical analysis on input string
@@ -222,14 +222,13 @@ namespace Trax.Editor.Lexers {
         static Regex RxPath = new Regex(@"[/\.]", RegexOptions.Compiled);
 
         public readonly string Buffer;
-        
-        public ScnLexemCollection(string buffer) : base(buffer.Length) { Buffer = buffer; }
+
+        public ScnLexemCollection(string buffer) : base(buffer.Length) => Buffer = buffer;
 
         public void Add(int type, int start, int length) {
             if (Buffer != null && type == ScnLexer.ScnType.Identifier) {
-                double n;
                 var i = Buffer.Substring(start, length);
-                if (Double.TryParse(i, NumberStyles.Float, CultureInfo.InvariantCulture, out n)) type = ScnLexer.ScnType.Number;
+                if (Double.TryParse(i, NumberStyles.Float, CultureInfo.InvariantCulture, out var n)) type = ScnLexer.ScnType.Number;
                 else if (ScnLexer.Keywords[0].Contains(i)) type = ScnLexer.ScnType.Keyword;
                 else if (ScnLexer.Keywords[1].Contains(i)) type = ScnLexer.ScnType.Keyword2;
                 else if (ScnLexer.Keywords[2].Contains(i)) type = ScnLexer.ScnType.Keyword3;

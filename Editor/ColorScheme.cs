@@ -112,7 +112,7 @@ namespace Trax.Editor {
             Properties = Source.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
             var commonColorNames = Enum.GetNames(typeof(CommonColors));
             var colorProperties = Properties.Where(p => p.PropertyType == typeof(Color));
-            Properties = colorProperties != null ? colorProperties.ToArray() : null;
+            Properties = colorProperties?.ToArray();
             if (Properties != null) {
                 var syntaxProperties = Properties.Where(p => !commonColorNames.Contains(p.Name));
                 if (syntaxProperties != null) SyntaxProperties = syntaxProperties.ToArray();
@@ -150,7 +150,7 @@ namespace Trax.Editor {
             Color color = Color.Transparent;
             foreach (CommonColors commonColor in Enum.GetValues(typeof(CommonColors))) {
                 propertyInfo = Properties.FirstOrDefault(p => p.Name == commonColor.ToString());
-                propertyValue = (propertyInfo != null) ? propertyInfo.GetValue(Source) : null;
+                propertyValue = propertyInfo?.GetValue(Source);
                 if (propertyValue != null && propertyValue is Color) {
                     color = (Color)propertyValue;
                     switch (commonColor) {

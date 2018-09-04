@@ -43,7 +43,7 @@ namespace Trax.Helpers.Bitmaps {
         /// Gets the bitmap size.
         /// </summary>
         public Size Size {
-            get { return new Size(Width, Height); }
+            get => new Size(Width, Height);
             set { Width = value.Width; Height = value.Height; }
         }
 

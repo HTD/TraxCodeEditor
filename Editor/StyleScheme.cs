@@ -68,7 +68,7 @@ namespace Trax.Editor {
             Properties = Source.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
             var commonStyleNames = Enum.GetNames(typeof(CommonStyles));
             var styleProperties = Properties.Where(p => p.PropertyType == typeof(FontStyle));
-            Properties = styleProperties != null ? styleProperties.ToArray() : null;
+            Properties = styleProperties?.ToArray();
             if (Properties != null) {
                 var syntaxProperties = Properties.Where(p => !commonStyleNames.Contains(p.Name));
                 if (syntaxProperties != null) SyntaxProperties = syntaxProperties.ToArray();
@@ -106,7 +106,7 @@ namespace Trax.Editor {
             FontStyle style = FontStyle.Regular;
             foreach (CommonStyles commonStyle in Enum.GetValues(typeof(CommonStyles))) {
                 propertyInfo = Properties.FirstOrDefault(p => p.Name == commonStyle.ToString());
-                propertyValue = (propertyInfo != null) ? propertyInfo.GetValue(Source) : null;
+                propertyValue = propertyInfo?.GetValue(Source);
                 if (propertyValue != null && propertyValue is FontStyle) {
                     style = (FontStyle)propertyValue;
                     switch (commonStyle) {

@@ -159,4 +159,28 @@
   <data name="LineNumber" xml:space="preserve">
     <value>Line number</value>
   </data>
+  <data name="DataLoaderException" xml:space="preserve">
+    <value>The data could not be added to the loader</value>
+  </data>
+  <data name="UnableToCreateLoaderException" xml:space="preserve">
+    <value>Unable to create loader</value>
+  </data>
+  <data name="ErrorCaption" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="NotFoundMessage" xml:space="preserve">
+    <value>Not found.</value>
+  </data>
+  <data name="InvalidExpressionMessage" xml:space="preserve">
+    <value>Invalid expression.</value>
+  </data>
+  <data name="ReplaceIn" xml:space="preserve">
+    <value>in</value>
+  </data>
+  <data name="Text" xml:space="preserve">
+    <value>text</value>
+  </data>
+  <data name="Selection" xml:space="preserve">
+    <value>selection</value>
+  </data>
 </root>

@@ -86,6 +86,9 @@ namespace Trax.Editor.Controls {
             FindNext.ToolTipText = I18N.FindNext + ' ' + GetShortcutDescription(FindNextShortcut);
             ReplaceNext.ToolTipText = I18N.ReplaceNext + ' ' + GetShortcutDescription(ReplaceNextShortcut);
             ReplaceAll.ToolTipText = I18N.ReplaceAll + ' ' + GetShortcutDescription(ReplaceAllShortcut);
+            ReplaceInDropDown.DropDownItems.Add(I18N.Text, null, SetReplaceInText);
+            ReplaceInDropDown.DropDownItems.Add(I18N.Selection, null, SetReplaceInSelection);
+            
             FindPrevious.Click += (s, e) => OnFind(new FindEventArgs(this, FindDirection.Previous));
             FindNext.Click += (s, e) => OnFind(new FindEventArgs(this, FindDirection.Next));
             ReplaceNext.Click += (s, e) => OnReplace(new FindEventArgs(this, FindDirection.Next));
@@ -131,9 +134,12 @@ namespace Trax.Editor.Controls {
         protected override void AddItems() {
             Items.Add(FindBox);
             Items.Add(ReplaceBox);
+            Items.Add(ReplaceInLabel);
+            Items.Add(ReplaceInDropDown);
+            Items.Add(S1);
             Items.Add(MatchCase);
             Items.Add(UseRegularExpressions);
-            Items.Add(new ToolStripSeparator());
+            Items.Add(S2);
             Items.Add(FindPrevious);
             Items.Add(FindNext);
             Items.Add(ReplaceNext);
@@ -148,11 +154,12 @@ namespace Trax.Editor.Controls {
             if (context == "replace") {
                 IsReplaceMode = true;
                 LabelText = I18N.Replace + ':';
-                ReplaceBox.Visible = ReplaceNext.Visible = ReplaceAll.Visible = true;
+
+                ReplaceBox.Visible = ReplaceInLabel.Visible = ReplaceInDropDown.Visible = ReplaceNext.Visible = ReplaceAll.Visible = S1.Visible = true;
             } else {
                 IsReplaceMode = false;
                 LabelText = I18N.Find + ':';
-                ReplaceBox.Visible = ReplaceNext.Visible = ReplaceAll.Visible = false;
+                ReplaceBox.Visible = ReplaceInLabel.Visible = ReplaceInDropDown.Visible = ReplaceNext.Visible = ReplaceAll.Visible = S1.Visible = false;
             }
         }
 
@@ -211,6 +218,28 @@ namespace Trax.Editor.Controls {
         /// <param name="e"></param>
         protected void OnExit(EventArgs e) => Exit?.Invoke(this, e);
 
+        /// <summary>
+        /// Handles "replace in text" dropdown click.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SetReplaceInText(object sender, EventArgs e) {
+            ReplaceNext.Enabled = true;
+            ReplaceInDropDown.Text = I18N.Text;
+            IsReplaceInSelection = false;
+        }
+
+        /// <summary>
+        /// Handles "replace in selection" dropdown click.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SetReplaceInSelection(object sender, EventArgs e) {
+            ReplaceNext.Enabled = false;
+            ReplaceInDropDown.Text = I18N.Selection;
+            IsReplaceInSelection = true;
+        }
+
         #endregion
 
         #region Controls
@@ -221,14 +250,20 @@ namespace Trax.Editor.Controls {
         internal ToolStripButton FindPrevious = new ToolStripButton();
         internal ToolStripButton FindNext = new ToolStripButton();
         internal ToolStripTextBox ReplaceBox = new ToolStripTextBox() { AutoSize = false, Width = 200 };
+        internal ToolStripLabel ReplaceInLabel = new ToolStripLabel() { Text = I18N.ReplaceIn };
+        internal ToolStripDropDownButton ReplaceInDropDown = new ToolStripDropDownButton() { Text = I18N.Text, AutoToolTip = false };
+
         internal ToolStripButton ReplaceNext = new ToolStripButton();
         internal ToolStripButton ReplaceAll = new ToolStripButton();
+        internal ToolStripSeparator S1 = new ToolStripSeparator();
+        internal ToolStripSeparator S2 = new ToolStripSeparator();
 
         #endregion
 
         #region Data
 
         private bool IsReplaceMode;
+        internal bool IsReplaceInSelection;
 
         #endregion
 
@@ -248,20 +283,29 @@ namespace Trax.Editor.Controls {
         /// Gets text to find.
         /// </summary>
         public string Search { get; protected set; }
+        
         /// <summary>
         /// Gets replacement text.
         /// </summary>
         public string Replace { get; protected set; }
+        
+        /// <summary>
+        /// Gets a flag indicating whether the replacement is to be made within the current selection only.
+        /// </summary>
+        public bool ReplaceInSelection { get; protected set; }
+
         /// <summary>
         /// Gets find direction.
         /// </summary>
         public FindDirection Direction { get; protected set; }
+        
         /// <summary>
-        /// Gets the flag indicating whether operation should match character case.
+        /// Gets a flag indicating whether operation should match character case.
         /// </summary>
         public bool MatchCase { get; protected set; }
+        
         /// <summary>
-        /// Gets the flag indicating whether operation should match regular expressions.
+        /// Gets a flag indicating whether operation should match regular expressions.
         /// </summary>
         public bool UseRegularExpressions { get; protected set; }
 
@@ -274,6 +318,7 @@ namespace Trax.Editor.Controls {
             Search = source.FindBox.Text;
             Replace = source.ReplaceBox.Text;
             Direction = direction;
+            ReplaceInSelection = source.IsReplaceInSelection;
             MatchCase = source.MatchCase.Checked;
             UseRegularExpressions = source.UseRegularExpressions.Checked;
         }

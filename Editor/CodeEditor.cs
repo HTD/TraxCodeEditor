@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using ScintillaNET;
 using Trax.Editor.Controls;
+using Woof.SystemEx;
 
 namespace Trax.Editor {
 
@@ -81,7 +82,7 @@ namespace Trax.Editor {
         /// </summary>
         [Browsable(true)]
         public IContainerLexer ContainerLexer {
-            get { return _ContainerLexer; }
+            get => _ContainerLexer;
             set {
                 _ContainerLexer = value;
                 Lexer = Lexer.Container;
@@ -114,9 +115,7 @@ namespace Trax.Editor {
         [Description("Sets predefined build in color scheme, style scheme and line folding scheme or gets the current one")]
         [DefaultValue(typeof(Presets), "Google")]
         public Presets Preset {
-            get {
-                return _Preset;
-            }
+            get => _Preset;
             set {
                 switch (_Preset = value) {
                     case Presets.Google:
@@ -159,9 +158,7 @@ namespace Trax.Editor {
         [Category("Behavior")]
         [DefaultValue(true)]
         public bool ShowLineNumbers {
-            get {
-                return _ShowLineNumbers;
-            }
+            get => _ShowLineNumbers;
             set {
                 _MaxLineNumberCharLength = 0;
                 _ShowLineNumbers = value;
@@ -177,9 +174,7 @@ namespace Trax.Editor {
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         [DefaultValue(typeof(Font), "Consolas, 9.75pt")]
         public override Font Font {
-            get {
-                return base.Font;
-            }
+            get => base.Font;
             set {
                 base.Font = value;
                 for (int i = 0; i < Styles.Count; i++) if (i != Style.CallTip) SetStyleFont(i, value);
@@ -193,12 +188,8 @@ namespace Trax.Editor {
         [Description("Font used for calltips")]
         [DefaultValue(typeof(Font), "Microsoft Sans Serif, 9pt")]
         public Font CallTipFont {
-            get {
-                return GetStyleFont(Style.CallTip);
-            }
-            set {
-                SetStyleFont(Style.CallTip, value);
-            }
+            get => GetStyleFont(Style.CallTip);
+            set => SetStyleFont(Style.CallTip, value);
         }
 
         /// <summary>
@@ -209,9 +200,7 @@ namespace Trax.Editor {
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         [DefaultValue(typeof(Color), "Window")]
         public override Color BackColor {
-            get {
-                return base.BackColor;
-            }
+            get => base.BackColor;
             set {
                 base.BackColor = value;
                 for (int i = 0; i < Styles.Count; i++)
@@ -227,9 +216,7 @@ namespace Trax.Editor {
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         [DefaultValue(typeof(Color), "WindowText")]
         public override Color ForeColor {
-            get {
-                return base.ForeColor;
-            }
+            get => base.ForeColor;
             set {
                 base.ForeColor = value;
                 for (int i = 0; i < Styles.Count; i++)
@@ -244,12 +231,8 @@ namespace Trax.Editor {
         [Description("Gets or sets gutter background color")]
         [DefaultValue(typeof(Color), "#eeeeee")]
         public Color GutterBackColor {
-            get {
-                return Styles[Style.LineNumber].BackColor;
-            }
-            set {
-                Styles[Style.LineNumber].BackColor = value;
-            }
+            get => Styles[Style.LineNumber].BackColor;
+            set => Styles[Style.LineNumber].BackColor = value;
         }
 
         /// <summary>
@@ -259,12 +242,8 @@ namespace Trax.Editor {
         [Description("Gets or sets gutter text color")]
         [DefaultValue(typeof(Color), "#aaaaaa")]
         public Color GutterForeColor {
-            get {
-                return Styles[Style.LineNumber].ForeColor;
-            }
-            set {
-                Styles[Style.LineNumber].ForeColor = value;
-            }
+            get => Styles[Style.LineNumber].ForeColor;
+            set => Styles[Style.LineNumber].ForeColor = value;
         }
 
         /// <summary>
@@ -274,12 +253,8 @@ namespace Trax.Editor {
         [Description("Gets or sets calltip background color")]
         [DefaultValue(typeof(Color), "#f7f7f7")]
         public Color CallTipBackColor {
-            get {
-                return Styles[Style.CallTip].BackColor;
-            }
-            set {
-                Styles[Style.CallTip].BackColor = value;
-            }
+            get => Styles[Style.CallTip].BackColor;
+            set => Styles[Style.CallTip].BackColor = value;
         }
 
         /// <summary>
@@ -289,19 +264,15 @@ namespace Trax.Editor {
         [Description("Gets or sets calltip text color")]
         [DefaultValue(typeof(Color), "#222222")]
         public Color CallTipForeColor {
-            get {
-                return Styles[Style.CallTip].ForeColor;
-            }
-            set {
-                Styles[Style.CallTip].ForeColor = value;
-            }
+            get => Styles[Style.CallTip].ForeColor;
+            set => Styles[Style.CallTip].ForeColor = value;
         }
 
         [Category("Appearance")]
         [Description("Gets or sets fold margin color")]
         [DefaultValue(typeof(Color), "Window")]
         public Color FoldMarginColor {
-            get { return _FoldMarginColor; }
+            get => _FoldMarginColor;
             set {
                 SetFoldMarginColor(true, _FoldMarginColor = value);
                 SetFoldMarginHighlightColor(true, value);
@@ -309,7 +280,7 @@ namespace Trax.Editor {
         }
 
         public Color FoldingFillColor {
-            get { return _FoldingFillColor; }
+            get => _FoldingFillColor;
             set {
                 _FoldingFillColor = value;
                 Markers[Marker.Folder].SetForeColor(value);
@@ -323,7 +294,7 @@ namespace Trax.Editor {
         }
 
         public Color FoldingLineColor {
-            get { return _FoldingFillColor; }
+            get => _FoldingFillColor;
             set {
                 _FoldingLineColor = value;
                 Markers[Marker.Folder].SetBackColor(value);
@@ -344,7 +315,7 @@ namespace Trax.Editor {
         [DefaultValue(typeof(FoldingStyles), "SquareTrees")]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public FoldingStyles FoldingStyle {
-            get { return _FoldingStyle; }
+            get => _FoldingStyle;
             set {
                 _FoldingStyle = value;
                 switch (value) {
@@ -405,9 +376,7 @@ namespace Trax.Editor {
         [Description("Gets or sets fold margin display state.")]
         [DefaultValue(false)]
         public bool ShowFoldMargin {
-            get {
-                return _ShowFoldMargin;
-            }
+            get => _ShowFoldMargin;
             set {
                 if (_ShowFoldMargin = value) {
                     AutomaticFold = (AutomaticFold.Show | AutomaticFold.Click | AutomaticFold.Change);
@@ -436,9 +405,7 @@ namespace Trax.Editor {
         [Description("Gets or sets keywords sets to be assigned for current lexer.")]
         [DefaultValue(typeof(KeywordSets), "None")]
         public KeywordSets Keywords {
-            get {
-                return _Keywords;
-            }
+            get => _Keywords;
             set {
                 switch (_Keywords = value) {
                     case KeywordSets.None:
@@ -467,9 +434,7 @@ namespace Trax.Editor {
         /// </summary>
         [DefaultValue(4)]
         public new int TabWidth {
-            get {
-                return base.TabWidth;
-            }
+            get => base.TabWidth;
             set {
                 base.TabWidth = value;
                 IndentationUnit = base.UseTabs ? "\t" : "".PadRight(value);
@@ -481,9 +446,7 @@ namespace Trax.Editor {
         /// </summary>
         [DefaultValue(false)]
         public new bool UseTabs {
-            get {
-                return base.UseTabs;
-            }
+            get => base.UseTabs;
             set {
                 base.UseTabs = value;
                 IndentationUnit = value ? "\t" : "".PadRight(base.TabWidth);
@@ -502,9 +465,7 @@ namespace Trax.Editor {
         /// Gets or sets current lexer.
         /// </summary>
         public new Lexer Lexer {
-            get {
-                return base.Lexer;
-            }
+            get => base.Lexer;
             set {
                 base.Lexer = value;
                 if (ColorScheme != null) ColorScheme.Reset();
@@ -558,9 +519,7 @@ namespace Trax.Editor {
         /// <summary>
         /// Initializes static properties of the control
         /// </summary>
-        static CodeEditor() {
-            _StyleProperties = typeof(Style).GetProperties(BindingFlags.Public | BindingFlags.Instance);
-        }
+        static CodeEditor() => _StyleProperties = typeof(Style).GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
         /// <summary>
         /// Creates new Scintilla editor and sets its properties to defaults
@@ -607,17 +566,13 @@ namespace Trax.Editor {
         /// Sets current color scheme from object with Color properties
         /// </summary>
         /// <param name="source"></param>
-        public void SetColorScheme(object source) {
-            ColorScheme = new ColorScheme(this, source);
-        }
+        public void SetColorScheme(object source) => ColorScheme = new ColorScheme(this, source);
 
         /// <summary>
         /// Sets current style scheme from object with FontStyle properties
         /// </summary>
         /// <param name="source"></param>
-        public void SetStyleScheme(object source) {
-            StyleScheme = new StyleScheme(this, source);
-        }
+        public void SetStyleScheme(object source) => StyleScheme = new StyleScheme(this, source);
 
         /// <summary>
         /// Loads a file using background document loader, background task (outside UI thread)
@@ -638,7 +593,7 @@ namespace Trax.Editor {
                     using (var reader = new StreamReader(file, Encoding, detectBOM, LoadingBufferSize)) {
                         while ((count = await reader.ReadAsync(buffer, 0, buffer.Length).ConfigureAwait(false)) > 0) {
                             cancellationToken.ThrowIfCancellationRequested();
-                            if (!loader.AddData(buffer, count)) throw new IOException("The data could not be added to the loader.");
+                            if (!loader.AddData(buffer, count)) throw new IOException(I18N.DataLoaderException);
                         }
                         return loader.ConvertToDocument();
                     }
@@ -666,7 +621,7 @@ namespace Trax.Editor {
                 ClearAll();
                 Document = Document.Empty;
                 var loader = CreateLoader(LoadingBufferSize);
-                if (loader == null) throw new ApplicationException("Unable to create loader.");
+                if (loader == null) throw new ApplicationException(I18N.UnableToCreateLoaderException);
                 var cts = new CancellationTokenSource();
                 if (encoding != null) Encoding = encoding;
                 else if (Encoding == null) Encoding = Encoding.UTF8;
@@ -682,7 +637,7 @@ namespace Trax.Editor {
             }
             catch (OperationCanceledException) { }
             catch (Exception x) {
-                MessageBox.Show(this, x.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(this, x.Message, I18N.ErrorCaption, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally {
                 Enabled = _enabled;
@@ -770,9 +725,7 @@ namespace Trax.Editor {
         /// </summary>
         /// <param name="c"></param>
         /// <returns></returns>
-        private bool IsTextSeparator(char c) {
-            return c == ' ' || c == '\t' || c == '\r' || c == '\n' || c == ';' || c == '"' || c == '\'';
-        }
+        private bool IsTextSeparator(char c) => c == ' ' || c == '\t' || c == '\r' || c == '\n' || c == ';' || c == '"' || c == '\'';
 
         /// <summary>
         /// Find substring's start position
@@ -995,8 +948,8 @@ namespace Trax.Editor {
         private void OnFind(FindEventArgs e) {
             Find_GetRegex(e);
             Find_LastIndex = (e.Direction != FindDirection.Previous)
-                ? this.CurrentPosition + Find_LastLength
-                : this.CurrentPosition - Find_LastLength;
+                ? CurrentPosition + Find_LastLength
+                : CurrentPosition - Find_LastLength;
             var index = 0;
             var startIndex = 0;
             var endIndex = Text.Length - 1;
@@ -1037,8 +990,47 @@ namespace Trax.Editor {
         /// </summary>
         /// <param name="e">Event arguments.</param>
         private void OnReplace(FindEventArgs e) {
+            switch (e.Direction) {
+                case FindDirection.Next:
+                    OnFind(e);
+                    ReplaceSelection(e.Replace);
+                    break;
+                case FindDirection.All:
+                    if (Find_GetRegex(e)) {
+                        if (e.ReplaceInSelection) {
+                            var selection = Selections[MainSelection];
+                            var selectionText = Text.Substring(selection.Start, selection.End - selection.Start);
+                            if (e.MatchCase)
+                                selectionText = Find_Regex == null
+                                    ? selectionText.Replace(e.Search, e.Replace)
+                                    : Find_Regex.Replace(selectionText, e.Replace);
+                            else
+                                selectionText = Find_Regex == null
+                                    ? selectionText.Replace(e.Search, e.Replace, StringComparison.OrdinalIgnoreCase)
+                                    : Find_Regex.Replace(selectionText, e.Replace);
+                            ReplaceSelection(selectionText);
+                        }
+                        else {
+                            if (e.MatchCase)
+                                Text = Find_Regex == null
+                                    ? Text.Replace(e.Search, e.Replace)
+                                    : Find_Regex.Replace(Text, e.Replace);
+                            else
+                                Text = Find_Regex == null
+                                    ? Text.Replace(e.Search, e.Replace, StringComparison.OrdinalIgnoreCase)
+                                    : Find_Regex.Replace(Text, e.Replace);
+                        }
+                    }
+                    break;
+            }
             ;
-            // TODO: Add replace / replace all code.
+            // TODO: 1. "Replace" should actually trigger "Find Next" then "Replace Selection".
+            // TODO: 2. "Replace All" should actually trigger "Find Next" then "Replace All", then mark the last replacement.
+            // TODO: 3. Tool window colors shoud be either readable or theme-able.
+            // TODO: 4. XML support.
+            // TODO: 5. JSON support.
+            // TODO: 6. Better overwrite mode.
+            // TODO: 7. Release WPF editor instance with installer.
         }
 
         private void OnFound(int start, int length) {
@@ -1050,13 +1042,13 @@ namespace Trax.Editor {
         private void OnNotFound() {
             Find_LastIndex = -1;
             Find_LastLength = 0;
-            MessageBox.Show("Not found.");
+            MessageBox.Show(I18N.NotFoundMessage);
         }
 
         private void OnInvalidExpression() {
             Find_LastIndex = -1;
             Find_LastLength = 0;
-            MessageBox.Show("Invalid expression.", "", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            MessageBox.Show(I18N.InvalidExpressionMessage, "", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
 
         /// <summary>

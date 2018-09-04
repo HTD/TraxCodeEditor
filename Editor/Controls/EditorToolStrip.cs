@@ -14,8 +14,8 @@ namespace Trax.Editor.Controls {
         /// Gets or sets tool strip label.
         /// </summary>
         public virtual string LabelText {
-            get { return Label.Text; }
-            set { Label.Text = value; }
+            get => Label.Text;
+            set => Label.Text = value;
         }
 
         /// <summary>
@@ -212,8 +212,8 @@ namespace Trax.Editor.Controls {
         /// Contains code editor reference.
         /// </summary>
         protected CodeEditor Editor {
-            get { return base.Parent as CodeEditor; }
-            set { base.Parent = value; }
+            get => base.Parent as CodeEditor;
+            set => base.Parent = value;
         }
 
         /// <summary>

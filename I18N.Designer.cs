@@ -19,7 +19,7 @@ namespace Trax {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class I18N {
@@ -57,6 +57,24 @@ namespace Trax {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The data could not be added to the loader.
+        /// </summary>
+        internal static string DataLoaderException {
+            get {
+                return ResourceManager.GetString("DataLoaderException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
+        internal static string ErrorCaption {
+            get {
+                return ResourceManager.GetString("ErrorCaption", resourceCulture);
             }
         }
         
@@ -106,6 +124,15 @@ namespace Trax {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid expression..
+        /// </summary>
+        internal static string InvalidExpressionMessage {
+            get {
+                return ResourceManager.GetString("InvalidExpressionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Line number.
         /// </summary>
         internal static string LineNumber {
@@ -124,6 +151,15 @@ namespace Trax {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Not found..
+        /// </summary>
+        internal static string NotFoundMessage {
+            get {
+                return ResourceManager.GetString("NotFoundMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Replace.
         /// </summary>
         internal static string Replace {
@@ -138,6 +174,15 @@ namespace Trax {
         internal static string ReplaceAll {
             get {
                 return ResourceManager.GetString("ReplaceAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to in.
+        /// </summary>
+        internal static string ReplaceIn {
+            get {
+                return ResourceManager.GetString("ReplaceIn", resourceCulture);
             }
         }
         
@@ -174,6 +219,33 @@ namespace Trax {
         internal static string SearchTerm {
             get {
                 return ResourceManager.GetString("SearchTerm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to selection.
+        /// </summary>
+        internal static string Selection {
+            get {
+                return ResourceManager.GetString("Selection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to text.
+        /// </summary>
+        internal static string Text {
+            get {
+                return ResourceManager.GetString("Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to create loader.
+        /// </summary>
+        internal static string UnableToCreateLoaderException {
+            get {
+                return ResourceManager.GetString("UnableToCreateLoaderException", resourceCulture);
             }
         }
         
